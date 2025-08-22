@@ -1,4 +1,4 @@
-package com.paymybuddy.repository.interfaces;
+package com.paymybuddy.repository;
 
 import com.paymybuddy.models.UserConnection;
 import org.springframework.data.jpa.repository.JpaRepository;
