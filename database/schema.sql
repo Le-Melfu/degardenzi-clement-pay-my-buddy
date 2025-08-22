@@ -3,11 +3,6 @@
 CREATE DATABASE IF NOT EXISTS pay_my_buddy;
 USE pay_my_buddy;
 
--- Tables
-DROP TABLE IF EXISTS transactions;
-DROP TABLE IF EXISTS user_connections;
-DROP TABLE IF EXISTS users;
-
 CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(50) NOT NULL,
