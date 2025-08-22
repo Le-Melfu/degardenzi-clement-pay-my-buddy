@@ -1,6 +1,6 @@
 -- Pay My Buddy - Données de test
 
-USE pay_my_buddy;
+USE pay_my_buddy_db;
 
 -- Utilisateurs de démo
 INSERT INTO users (username, email, password)
@@ -17,8 +17,8 @@ INSERT INTO user_connections (user_id, connection_id) VALUES
 (3, 1); -- Charlie -> Alice
 
 -- Transactions de démo
-INSERT INTO transactions (sender_id, receiver_id, description, amount)
+INSERT INTO transactions (sender_id, receiver_id, description, amount_in_cents)
 VALUES 
-(1, 2, 'Déjeuner', 5.00),
-(2, 1, 'Partage Uber', 2.00),
-(1, 3, 'Café', 1.50);
+(1, 2, 'Déjeuner', 500),
+(2, 1, 'Partage Uber', 200),
+(1, 3, 'Café', 150);
