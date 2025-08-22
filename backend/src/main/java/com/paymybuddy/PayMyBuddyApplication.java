@@ -1,4 +1,4 @@
-package com.paymybuddycdegardenzi.paymybuddycdegardenzi;
+package com.paymybuddycdegardenzi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
