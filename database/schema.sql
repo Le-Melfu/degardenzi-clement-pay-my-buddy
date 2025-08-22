@@ -21,7 +21,6 @@ CREATE TABLE user_connections (
   connection_id INT NOT NULL,
   FOREIGN KEY (user_id) REFERENCES users(id),
   FOREIGN KEY (connection_id) REFERENCES users(id),
-  CONSTRAINT chk_order CHECK (user_id < connection_id),
   UNIQUE (user_id, connection_id)
 );
 
