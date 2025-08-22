@@ -33,6 +33,7 @@ CREATE TABLE transactions (
   receiver_id INT NOT NULL,
   description VARCHAR(255),
   amount_in_cents BIGINT NOT NULL,
+  status VARCHAR(50) NOT NULL,
   FOREIGN KEY (sender_id) REFERENCES users(id),
   FOREIGN KEY (receiver_id) REFERENCES users(id)
 );
