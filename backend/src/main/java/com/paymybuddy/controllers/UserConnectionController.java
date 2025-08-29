@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.paymybuddy.models.User;
 import com.paymybuddy.models.UserConnection;
 import com.paymybuddy.models.dtos.AddConnectionRequestDTO;
 import com.paymybuddy.services.interfaces.UserConnectionService;
@@ -17,8 +16,6 @@ import com.paymybuddy.services.interfaces.UserService;
 
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestHeader;
 
 @RestController
 public class UserConnectionController {

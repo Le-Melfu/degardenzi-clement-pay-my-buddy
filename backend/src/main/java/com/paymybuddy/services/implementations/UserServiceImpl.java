@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.paymybuddy.models.User;
 import com.paymybuddy.models.dtos.UserCredentialsDTO;
+import com.paymybuddy.logging.LoggingService;
 import com.paymybuddy.repository.UserRepository;
 import com.paymybuddy.services.interfaces.UserService;
 
@@ -13,25 +14,33 @@ import com.paymybuddy.services.interfaces.UserService;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final LoggingService loggingService;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, LoggingService loggingService) {
         this.userRepository = userRepository;
+        this.loggingService = loggingService;
     }
 
     @Override
     public User register(User user) {
         // TODO: use bcrypt to hash the password
-        return userRepository.save(user);
+        try {
+            return userRepository.save(user);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to register user", e);
+        } finally {
+            loggingService.info("User " + user.getEmail() + " registered successfully");
+        }
     }
 
     @Override
     public Optional<User> login(UserCredentialsDTO userCredentials) {
-        Optional<User> userOptional = userRepository.findByEmail(userCredentials.getEmail());
+        Optional<User> user = userRepository.findByEmail(userCredentials.getEmail());
         // TODO: use bcrypt to hash the password
-        if (userOptional.isPresent()) {
-            User existingUser = userOptional.get();
+        if (user.isPresent()) {
+            User existingUser = user.get();
             if (existingUser.getPassword().equals(userCredentials.getPassword())) {
-                return userOptional;
+                return user;
             }
         }
         return Optional.empty();
