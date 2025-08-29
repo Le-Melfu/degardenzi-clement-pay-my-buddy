@@ -3,11 +3,11 @@
 USE pay_my_buddy_db;
 
 -- Utilisateurs de démo
-INSERT INTO users (username, email, password)
+INSERT INTO users (username, email, password, balance_in_cents)
 VALUES
-('alice',   'alice@example.com',   'password123'),
-('bob',     'bob@example.com',     'password123'),
-('charlie', 'charlie@example.com', 'password123');
+('alice',   'alice@example.com',   'password123', 1000),
+('bob',     'bob@example.com',     'password123', 1000),
+('charlie', 'charlie@example.com', 'password123', 1000);
 
 -- Connexions entre utilisateurs
 INSERT INTO user_connections (user_id, connection_id) VALUES

@@ -30,6 +30,9 @@ public class Transaction {
     @Column(name = "amount_in_cents", nullable = false)
     private Long amountInCents;
 
+    // TODO: even if we use transactionnal management for SQL operations, we should
+    // still use a separate column for the status to keep trace of the status of the
+    // transaction (PENDING, CONFIRMED, CANCELLED)
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private TransactionStatus status;

@@ -2,8 +2,6 @@ package com.paymybuddy.repository;
 
 import com.paymybuddy.models.Transaction;
 
-import jakarta.annotation.Nonnull;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.Modifying;
@@ -39,7 +37,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
          * @param transactionId
          * @return a specific transaction
          */
-        @NonNull Optional<Transaction> findById(@NonNull Integer transactionId);
+        @NonNull
+        Optional<Transaction> findById(@NonNull Integer transactionId);
 
         /**
          * Find all transactions for a user (both sent and received)

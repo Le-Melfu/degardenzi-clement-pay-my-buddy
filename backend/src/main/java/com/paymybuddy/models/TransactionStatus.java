@@ -2,7 +2,7 @@ package com.paymybuddy.models;
 
 public enum TransactionStatus {
     PENDING,
-    CONFIRMED,
+    SUCCESS,
     CANCELLED,
     FAILED
 }

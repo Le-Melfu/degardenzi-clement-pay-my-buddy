@@ -12,8 +12,8 @@ import com.paymybuddy.services.interfaces.TransactionService;
 
 import io.micrometer.common.lang.NonNull;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.PathVariable;
-
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 public class TransactionController {
@@ -31,8 +31,10 @@ public class TransactionController {
     }
 
     @GetMapping("/transactions/{transactionId}")
-    public Transaction getTransaction(@PathVariable @NonNull Integer transactionId){
-        return transactionService.getTransaction(transactionId);
+    public Transaction getTransaction(@PathVariable @NonNull Integer transactionId) {
+        // TODO: check if user is authenticated
+        return transactionService.getTransaction(transactionId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Transaction not found"));
     }
 
 }

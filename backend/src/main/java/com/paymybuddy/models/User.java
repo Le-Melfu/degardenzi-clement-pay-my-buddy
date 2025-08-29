@@ -3,6 +3,7 @@ package com.paymybuddy.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,4 +34,7 @@ public class User {
     @Size(min = 6, message = "Password must be at least 6 characters")
     @Column(name = "password", nullable = false)
     private String password;
+
+    @Column(name = "balance_in_cents", nullable = false, columnDefinition = "BIGINT DEFAULT 0")
+    private Long balanceInCents = 0L;
 }
