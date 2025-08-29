@@ -32,5 +32,5 @@ public class Transaction {
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
-    private TransactionStatus status = TransactionStatus.PENDING;
+    private TransactionStatus status;
 }
