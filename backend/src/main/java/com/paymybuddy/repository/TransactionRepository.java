@@ -3,6 +3,7 @@ package com.paymybuddy.repository;
 import com.paymybuddy.models.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.lang.NonNull;
@@ -56,29 +57,14 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
         Optional<Transaction> findByIdAndStatus(Integer transactionId, String status);
 
         /**
-         * Create a new transaction between two users
-         * 
-         * @param senderId      the sender user ID
-         * @param receiverId    the receiver user ID
-         * @param amountInCents the amount in cents
-         * @param description   the transaction description
-         * @return the created transaction
-         */
-        @Query("INSERT INTO Transaction (sender_id, receiver_id, amount_in_cents, description, status) VALUES (:senderId, :receiverId, :amountInCents, :description, 'PENDING')")
-        Transaction createTransaction(@Param("senderId") Integer senderId,
-                        @Param("receiverId") Integer receiverId,
-                        @Param("amountInCents") Long amountInCents,
-                        @Param("description") String description);
-
-        /**
          * Update transaction status
          * 
          * @param transactionId the transaction ID
          * @param status        the new status
-         * @return the updated transaction
          */
+        @Modifying
         @Query("UPDATE Transaction t SET t.status = :status WHERE t.id = :transactionId")
-        Transaction updateTransactionStatus(@Param("transactionId") Integer transactionId,
+        void updateTransactionStatus(@Param("transactionId") Integer transactionId,
                         @Param("status") String status);
 
         /**
