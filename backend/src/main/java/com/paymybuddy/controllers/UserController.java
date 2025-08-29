@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paymybuddy.models.User;
+import com.paymybuddy.models.UserCredentials;
 import com.paymybuddy.services.interfaces.UserService;
 
 @RestController
@@ -27,17 +28,18 @@ public class UserController {
     @PostMapping("/register")
     public User register(@RequestBody @Valid User user) {
         if (userService.findByEmail(user.getEmail()).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User already exists");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A user with this email already exists");
         }
         return userService.register(user);
     }
 
     @GetMapping("/login")
-    public Optional<User> login(@RequestBody @Valid User user) {
-        if (!userService.findByEmail(user.getEmail()).isPresent() || !userService.login(user).isPresent()) {
+    public Optional<User> login(@RequestBody @Valid UserCredentials userCredentials) {
+        if (!userService.findByEmail(userCredentials.getEmail()).isPresent()
+                || !userService.login(userCredentials).isPresent()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid credentials");
         }
 
-        return userService.login(user);
+        return userService.login(userCredentials);
     }
 }

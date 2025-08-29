@@ -3,6 +3,7 @@ package com.paymybuddy.services.interfaces;
 import org.springframework.lang.NonNull;
 
 import com.paymybuddy.models.User;
+import com.paymybuddy.models.UserCredentials;
 
 import java.util.Optional;
 
@@ -24,7 +25,7 @@ public interface UserService {
      * @param password the user password
      * @return the authenticated user if successful
      */
-    Optional<User> login(User user);
+    Optional<User> login(UserCredentials userCredentials);
 
     /**
      * Update user profile

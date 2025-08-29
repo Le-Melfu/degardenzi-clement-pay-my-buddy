@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.paymybuddy.models.User;
+import com.paymybuddy.models.UserCredentials;
 import com.paymybuddy.repository.UserRepository;
 import com.paymybuddy.services.interfaces.UserService;
 
@@ -23,11 +24,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> login(User user) {
-        Optional<User> userOptional = userRepository.findByEmail(user.getEmail());
+    public Optional<User> login(UserCredentials userCredentials) {
+        Optional<User> userOptional = userRepository.findByEmail(userCredentials.getEmail());
         if (userOptional.isPresent()) {
             User existingUser = userOptional.get();
-            if (existingUser.getPassword().equals(user.getPassword())) {
+            if (existingUser.getPassword().equals(userCredentials.getPassword())) {
                 return userOptional;
             }
         }
