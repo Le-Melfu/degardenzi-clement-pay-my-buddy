@@ -1,9 +1,7 @@
 package com.paymybuddy.services.interfaces;
 
-import org.springframework.lang.NonNull;
-
 import com.paymybuddy.models.User;
-import com.paymybuddy.models.UserCredentials;
+import com.paymybuddy.models.dtos.UserCredentialsDTO;
 
 import java.util.Optional;
 
@@ -15,32 +13,23 @@ public interface UserService {
      * @param user the user to register
      * @return the registered user
      */
-    @NonNull
     User register(User user);
 
     /**
      * Authenticate a user
      * 
-     * @param email    the user email
-     * @param password the user password
+     * @param userCredentials the user credentials
      * @return the authenticated user if successful
      */
-    Optional<User> login(UserCredentials userCredentials);
+    Optional<User> login(UserCredentialsDTO userCredentials);
 
     /**
-     * Update user profile
+     * Find user by ID
      * 
-     * @param user the updated user data
-     * @return the updated user
+     * @param userId the user ID to check
+     * @return the user if found
      */
-    User updateProfile(User user);
-
-    /**
-     * Delete user account
-     * 
-     * @param userId the user ID to delete
-     */
-    void deleteAccount(Integer userId);
+    Optional<User> findById(Integer userId);
 
     /**
      * Find user by email
