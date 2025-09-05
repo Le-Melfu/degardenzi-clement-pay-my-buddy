@@ -10,29 +10,58 @@
     padding: 0;
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-html {
+// Root element
+:root {
+    width: 100%;
+    height: 100%;
     font-size: 16px;
     line-height: 1.5;
     -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
 }
 
+// HTML element
+html {
+    width: 100%;
+    height: 100%;
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    overflow-x: hidden;
+}
+
+// Body element
 body {
+    width: 100%;
+    height: 100%;
+    min-width: 100%;
+    min-height: 100%;
     margin: 0;
+    padding: 0;
     display: flex;
-    place-items: center;
-    min-width: 100vw;
-    min-height: 100vh;
-    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    flex-direction: column;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+        Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
     color-scheme: light dark;
-    color: variables.$dark-text;
-    background-color: variables.$dark-bg;
+    color: variables.$light-text;
+    background-color: variables.$light-bg;
+    overflow-x: hidden;
+    overflow-y: auto;
     @include mixins.font-smoothing;
+}
+
+// Main app container
+#root {
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 // Global typography
@@ -45,6 +74,7 @@ h6 {
     margin: 0;
     font-weight: inherit;
     font-size: inherit;
+    color: variables.$light-text;
 }
 
 h1 {
@@ -70,7 +100,7 @@ a {
 // Global buttons
 button {
     @include mixins.button-base;
-    background-color: variables.$dark-button-bg;
+    background-color: variables.$light-button-bg;
 
     &:hover {
         border-color: variables.$primary-color;

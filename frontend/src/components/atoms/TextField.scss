@@ -8,7 +8,7 @@
 
     &__label {
         font-weight: 500;
-        color: variables.$dark-text;
+        color: variables.$light-text;
         font-size: 0.9rem;
     }
 
@@ -25,6 +25,7 @@
         font-family: inherit;
         transition: border-color variables.$transition-duration;
         background-color: #fff;
+        color: #333;
 
         &:focus {
             outline: none;
@@ -44,15 +45,24 @@
     }
 }
 
-// Light theme
-@media (prefers-color-scheme: light) {
-    .text-field {
-        &__label {
-            color: variables.$light-text;
-        }
+.text-field {
+    &__label {
+        color: variables.$light-text;
+    }
 
+    &__input {
+        background-color: #fff;
+        border-color: #ddd;
+        color: #333;
+    }
+}
+
+// Dark theme
+@media (prefers-color-scheme: dark) {
+    .text-field {
         &__input {
             background-color: #fff;
+            color: #333;
             border-color: #ddd;
         }
     }

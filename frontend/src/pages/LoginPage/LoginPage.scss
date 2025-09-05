@@ -1,4 +1,4 @@
-@use '../assets/styles/variables' as variables;
+@use '../../assets/styles/variables' as variables;
 
 .login-page {
     min-height: 100vh;
@@ -7,12 +7,16 @@
     justify-content: center;
     padding: 1rem;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
 
-// Light theme
-@media (prefers-color-scheme: light) {
-    .login-page {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    .error-message {
+        background-color: #fee;
+        color: #c33;
+        padding: 0.75rem;
+        border-radius: variables.$border-radius;
+        border: 1px solid #fcc;
+        margin-bottom: 1rem;
+        text-align: center;
+        font-size: 0.9rem;
     }
 }
 
@@ -20,5 +24,11 @@
 @media (prefers-color-scheme: dark) {
     .login-page {
         background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+
+        .error-message {
+            background-color: #3a1a1a;
+            color: #ff6b6b;
+            border-color: #5a2a2a;
+        }
     }
 }
