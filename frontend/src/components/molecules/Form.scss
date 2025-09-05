@@ -1,0 +1,63 @@
+@use '../../assets/styles/variables' as variables;
+
+.form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+
+    &__header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    &__title {
+        background-color: #ff6b35;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 0;
+        display: inline-block;
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__fields {
+        margin-bottom: 2rem;
+    }
+
+    &__actions {
+        display: flex;
+        justify-content: center;
+    }
+}
+
+// Light theme
+@media (prefers-color-scheme: light) {
+    .form {
+        background-color: #fff;
+        border-color: #e0e0e0;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+}
+
+// Dark theme
+@media (prefers-color-scheme: dark) {
+    .form {
+        background-color: #2a2a2a;
+        border-color: #404040;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+
+        &__title {
+            background-color: #ff6b35;
+        }
+    }
+}

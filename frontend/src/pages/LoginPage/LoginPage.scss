@@ -1,0 +1,24 @@
+@use '../assets/styles/variables' as variables;
+
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+// Light theme
+@media (prefers-color-scheme: light) {
+    .login-page {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+}
+
+// Dark theme
+@media (prefers-color-scheme: dark) {
+    .login-page {
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    }
+}

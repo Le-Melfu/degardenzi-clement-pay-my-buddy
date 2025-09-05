@@ -10,10 +10,7 @@ VALUES
 
 -- Connexions entre utilisateurs
 INSERT INTO user_connections (user_id, connection_id) VALUES
-(1, 2), -- Alice -> Bob
-(1, 3), -- Alice -> Charlie
-(2, 1), -- Bob -> Alice
-(3, 1); -- Charlie -> Alice
+(1, 2), -- test3 -> test7
 
 -- Transactions de démo
 INSERT INTO transactions (sender_id, receiver_id, description, amount_in_cents, status)

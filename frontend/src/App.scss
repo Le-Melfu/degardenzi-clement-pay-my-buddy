@@ -1,0 +1,122 @@
+@use './assets/styles/variables' as variables;
+@use './assets/styles/mixins' as mixins;
+
+// Reset CSS
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    display: flex;
+    place-items: center;
+    min-width: 100vw;
+    min-height: 100vh;
+    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    color-scheme: light dark;
+    color: variables.$dark-text;
+    background-color: variables.$dark-bg;
+    @include mixins.font-smoothing;
+}
+
+// Global typography
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+    font-weight: inherit;
+    font-size: inherit;
+}
+
+h1 {
+    font-size: 3.2em;
+    line-height: 1.1;
+}
+
+p {
+    margin: 0;
+}
+
+// Global links
+a {
+    font-weight: 500;
+    color: variables.$primary-color;
+    text-decoration: inherit;
+
+    &:hover {
+        color: variables.$primary-hover;
+    }
+}
+
+// Global buttons
+button {
+    @include mixins.button-base;
+    background-color: variables.$dark-button-bg;
+
+    &:hover {
+        border-color: variables.$primary-color;
+    }
+
+    &:focus,
+    &:focus-visible {
+        outline: 4px auto -webkit-focus-ring-color;
+    }
+}
+
+// Global form elements
+input,
+textarea,
+select {
+    font-family: inherit;
+    font-size: inherit;
+    border: none;
+    outline: none;
+}
+
+// Global lists
+ul,
+ol {
+    list-style: none;
+}
+
+// Global images
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+// Light theme
+@media (prefers-color-scheme: light) {
+    body {
+        color: variables.$light-text;
+        background-color: variables.$light-bg;
+    }
+
+    a:hover {
+        color: variables.$primary-light-hover;
+    }
+
+    button {
+        background-color: variables.$light-button-bg;
+    }
+}

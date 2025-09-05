@@ -1,0 +1,59 @@
+@use '../../assets/styles/variables' as variables;
+
+.text-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+
+    &__label {
+        font-weight: 500;
+        color: variables.$dark-text;
+        font-size: 0.9rem;
+    }
+
+    &__required {
+        color: #e74c3c;
+        margin-left: 0.25rem;
+    }
+
+    &__input {
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: variables.$border-radius;
+        font-size: 1rem;
+        font-family: inherit;
+        transition: border-color variables.$transition-duration;
+        background-color: #fff;
+
+        &:focus {
+            outline: none;
+            border-color: variables.$primary-color;
+            box-shadow: 0 0 0 2px rgba(100, 108, 255, 0.2);
+        }
+
+        &--error {
+            border-color: #e74c3c;
+        }
+    }
+
+    &__error {
+        color: #e74c3c;
+        font-size: 0.8rem;
+        margin-top: 0.25rem;
+    }
+}
+
+// Light theme
+@media (prefers-color-scheme: light) {
+    .text-field {
+        &__label {
+            color: variables.$light-text;
+        }
+
+        &__input {
+            background-color: #fff;
+            border-color: #ddd;
+        }
+    }
+}
