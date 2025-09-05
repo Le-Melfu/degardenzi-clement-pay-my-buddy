@@ -13,7 +13,8 @@ CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(50) NOT NULL,
   email VARCHAR(100) NOT NULL UNIQUE,
-  password VARCHAR(255) NOT NULL
+  password VARCHAR(255) NOT NULL,
+  balance_in_cents BIGINT NOT NULL DEFAULT 0
 );
 
 -- User Connections
@@ -33,6 +34,7 @@ CREATE TABLE transactions (
   receiver_id INT NOT NULL,
   description VARCHAR(255),
   amount_in_cents BIGINT NOT NULL,
+  status VARCHAR(50) NOT NULL,
   FOREIGN KEY (sender_id) REFERENCES users(id),
   FOREIGN KEY (receiver_id) REFERENCES users(id)
 );
