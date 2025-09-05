@@ -10,9 +10,6 @@ import lombok.Data;
 public class CreateTransactionRequestDTO {
 
     @NotNull
-    private Integer senderId;
-
-    @NotNull
     private Integer receiverId;
 
     @NotNull

@@ -13,12 +13,13 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Integer> {
 
     /**
-     * Find a user by email
+     * Find a user by email (case insensitive)
      * 
      * @param email the user email
      * @return optional containing the user if found
      */
-    Optional<User> findByEmail(String email);
+    @Query("SELECT u FROM User u WHERE LOWER(u.email) = LOWER(:email)")
+    Optional<User> findByEmail(@Param("email") String email);
 
     /**
      * Get password for a specific email

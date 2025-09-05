@@ -12,20 +12,26 @@ import com.paymybuddy.models.UserConnection;
 import com.paymybuddy.repository.UserConnectionRepository;
 import com.paymybuddy.repository.UserRepository;
 import com.paymybuddy.services.interfaces.UserConnectionService;
+import com.paymybuddy.logging.LoggingService;
 
 @Service
 public class UserConnectionServiceImpl implements UserConnectionService {
 
     private final UserConnectionRepository userConnectionRepository;
     private final UserRepository userRepository;
+    private final LoggingService loggingService;
 
-    public UserConnectionServiceImpl(UserConnectionRepository userConnectionRepository, UserRepository userRepository) {
+    public UserConnectionServiceImpl(UserConnectionRepository userConnectionRepository, UserRepository userRepository,
+            LoggingService loggingService) {
         this.userConnectionRepository = userConnectionRepository;
         this.userRepository = userRepository;
+        this.loggingService = loggingService;
     }
 
     @Override
     public UserConnection addConnection(Integer userId, String connectionEmail) {
+        loggingService.info(
+                "UserConnectionServiceImpl: Adding connection for user: " + userId + " with email: " + connectionEmail);
         Optional<User> user = userRepository.findById(userId);
         if (!user.isPresent()) {
             throw new UserNotFoundException("User not found");
@@ -33,6 +39,7 @@ public class UserConnectionServiceImpl implements UserConnectionService {
 
         Optional<User> connectionUser = userRepository.findByEmail(connectionEmail);
         if (!connectionUser.isPresent()) {
+            loggingService.error("UserConnectionServiceImpl: No user found with this email: " + connectionEmail);
             throw new UserNotFoundException("No user found with this email");
         }
 

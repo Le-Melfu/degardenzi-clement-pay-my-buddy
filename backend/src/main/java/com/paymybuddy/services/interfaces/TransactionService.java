@@ -1,6 +1,7 @@
 package com.paymybuddy.services.interfaces;
 
 import com.paymybuddy.models.Transaction;
+import com.paymybuddy.models.User;
 import com.paymybuddy.models.dtos.CreateTransactionRequestDTO;
 
 import java.util.List;
@@ -11,13 +12,13 @@ public interface TransactionService {
     /**
      * Create a new transaction (PENDING status)
      * 
-     * @param senderId      the sender user ID
+     * @param sender        the sender user
      * @param receiverId    the receiver user ID
      * @param amountInCents the amount in cents
      * @param description   the transaction description
      * @return the created transaction
      */
-    Transaction createTransaction(CreateTransactionRequestDTO transactionRequest);
+    Transaction createTransaction(User sender, CreateTransactionRequestDTO transactionRequest);
 
     /**
      * Get a specific transaction

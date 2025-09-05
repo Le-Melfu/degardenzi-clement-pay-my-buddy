@@ -17,7 +17,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(@NonNull InterceptorRegistry registry) {
         registry.addInterceptor(requestLoggingInterceptor)
-                .addPathPatterns("/**") // Intercepte toutes les requêtes
-                .excludePathPatterns("/error"); // Exclut les pages d'erreur
+                .addPathPatterns("/**")
+                .excludePathPatterns("/error");
     }
 }

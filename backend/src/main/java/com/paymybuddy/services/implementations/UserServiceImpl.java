@@ -2,10 +2,12 @@ package com.paymybuddy.services.implementations;
 
 import java.util.Optional;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.paymybuddy.models.User;
 import com.paymybuddy.models.dtos.UserCredentialsDTO;
+import com.paymybuddy.models.dtos.PublicUserDTO;
 import com.paymybuddy.logging.LoggingService;
 import com.paymybuddy.repository.UserRepository;
 import com.paymybuddy.services.interfaces.UserService;
@@ -15,17 +17,24 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final LoggingService loggingService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, LoggingService loggingService) {
+    public UserServiceImpl(UserRepository userRepository, LoggingService loggingService,
+            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.loggingService = loggingService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public User register(User user) {
-        // TODO: use bcrypt to hash the password
+    public PublicUserDTO register(User user) {
         try {
-            return userRepository.save(user);
+            // Encode the password with BCrypt
+            String encodedPassword = passwordEncoder.encode(user.getPassword());
+            user.setBalanceInCents(10000L);
+            user.setPassword(encodedPassword);
+            userRepository.save(user);
+            return new PublicUserDTO(user.getId(), user.getUsername(), user.getEmail());
         } catch (Exception e) {
             throw new RuntimeException("Failed to register user", e);
         } finally {
@@ -34,16 +43,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> login(UserCredentialsDTO userCredentials) {
-        Optional<User> user = userRepository.findByEmail(userCredentials.getEmail());
-        // TODO: use bcrypt to hash the password
-        if (user.isPresent()) {
-            User existingUser = user.get();
-            if (existingUser.getPassword().equals(userCredentials.getPassword())) {
-                return user;
-            }
-        }
-        return Optional.empty();
+    public Optional<PublicUserDTO> login(UserCredentialsDTO userCredentials) {
+        return userRepository.findByEmail(userCredentials.getEmail())
+                .map(user -> new PublicUserDTO(user.getId(), user.getUsername(), user.getEmail()));
     }
 
     @Override

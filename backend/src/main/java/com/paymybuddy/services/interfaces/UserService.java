@@ -2,6 +2,7 @@ package com.paymybuddy.services.interfaces;
 
 import com.paymybuddy.models.User;
 import com.paymybuddy.models.dtos.UserCredentialsDTO;
+import com.paymybuddy.models.dtos.PublicUserDTO;
 
 import java.util.Optional;
 
@@ -13,7 +14,7 @@ public interface UserService {
      * @param user the user to register
      * @return the registered user
      */
-    User register(User user);
+    PublicUserDTO register(User user);
 
     /**
      * Authenticate a user
@@ -21,7 +22,7 @@ public interface UserService {
      * @param userCredentials the user credentials
      * @return the authenticated user if successful
      */
-    Optional<User> login(UserCredentialsDTO userCredentials);
+    Optional<PublicUserDTO> login(UserCredentialsDTO userCredentials);
 
     /**
      * Find user by ID
