@@ -49,6 +49,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void addMoney(User user, Long amountInCents) {
+        user.setBalanceInCents(user.getBalanceInCents() + amountInCents);
+        userRepository.save(user);
+        loggingService.info("UserService: Money added to user ID: " + user.getId() + " amount: " + amountInCents);
+    }
+
+    @Override
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }

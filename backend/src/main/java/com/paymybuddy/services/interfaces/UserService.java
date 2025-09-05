@@ -25,6 +25,14 @@ public interface UserService {
     Optional<PublicUserDTO> login(UserCredentialsDTO userCredentials);
 
     /**
+     * Add money to a user
+     * 
+     * @param user          the user to add money to
+     * @param amountInCents the amount to add
+     */
+    void addMoney(User user, Long amountInCents);
+
+    /**
      * Find user by ID
      * 
      * @param userId the user ID to check

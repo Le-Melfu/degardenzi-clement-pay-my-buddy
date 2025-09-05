@@ -22,15 +22,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        loggingService.info("CustomUserDetailsService: Looking for user with email: " + email);
 
         User user = userService.findByEmail(email)
                 .orElseThrow(() -> {
                     loggingService.error("CustomUserDetailsService: User not found with email: " + email);
                     return new UsernameNotFoundException("User not found: " + email);
                 });
-
-        loggingService.info("CustomUserDetailsService: User found: " + user.getUsername());
 
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getEmail())

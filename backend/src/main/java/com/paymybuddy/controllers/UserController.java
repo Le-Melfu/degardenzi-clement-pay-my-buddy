@@ -52,20 +52,32 @@ public class UserController {
             HttpServletRequest request) {
         if (authenticationService.authenticate(userCredentials, request)) {
             Optional<PublicUserDTO> user = userService.login(userCredentials);
+            loggingService.info("UserController: User logged in: " + user.get().getUsername());
             return user.isPresent() ? ResponseEntity.ok(user.get())
                     : ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-    @PostMapping("/logout")
+    @PostMapping("/log-out")
     public ResponseEntity<Void> logout(
-            @AuthenticationPrincipal org.springframework.security.core.userdetails.User principal) {
+            @AuthenticationPrincipal org.springframework.security.core.userdetails.User principal,
+            HttpServletRequest request) {
         try {
+            if (principal != null) {
+                loggingService.info("UserController: Logging out user: " + principal.getUsername());
+            } else {
+                loggingService.info("UserController: Logout requested but no user authenticated");
+            }
 
-            loggingService.info("UserController: Logout requested for user: " + principal.getUsername());
+            // Clear security context
             org.springframework.security.core.context.SecurityContextHolder.clearContext();
-            loggingService.info("UserController: Security context cleared");
+
+            // Invalidate session and clear cookie
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                session.invalidate();
+            }
 
             return ResponseEntity.ok().build();
         } catch (Exception e) {
@@ -73,5 +85,23 @@ public class UserController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @PostMapping("/add-money")
+    public ResponseEntity<Void> addMoney(@RequestBody @Valid Long amountInCents,
+            @AuthenticationPrincipal org.springframework.security.core.userdetails.User principal) {
+
+        try {
+            Optional<User> user = userService.findByEmail(principal.getUsername());
+            userService.addMoney(user.get(), amountInCents);
+            if (user.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+        } catch (Exception e) {
+            loggingService.error("UserController: Add money error - " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+        return ResponseEntity.ok().build();
     }
 }
