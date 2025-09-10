@@ -3,6 +3,7 @@ import HomePage from './pages/HomePage/HomePage'
 import LoginPage from './pages/LoginPage/LoginPage'
 import ProfilePage from './pages/UserPage/ProfilePage'
 import AddRelationPage from './pages/AddRelationPage/AddRelationPage'
+import TransferPage from './pages/TransferPage/TransferPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import SessionNotification from './components/SessionNotification'
 import { StrictMode } from 'react'
@@ -29,6 +30,14 @@ createRoot(document.getElementById('root')).render(
                     element={
                         <ProtectedRoute>
                             <AddRelationPage />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/transfer"
+                    element={
+                        <ProtectedRoute>
+                            <TransferPage />
                         </ProtectedRoute>
                     }
                 />

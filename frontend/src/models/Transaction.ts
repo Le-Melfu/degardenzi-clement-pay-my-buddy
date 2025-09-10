@@ -2,7 +2,7 @@ import { User } from './User'
 
 export interface Transaction {
     id: number
-    amount: number
+    amountInCents: number
     description: string
     sender: User
     receiver: User
@@ -11,15 +11,15 @@ export interface Transaction {
 
 export interface CreateTransactionRequest {
     receiverId: number
-    amount: number
+    amountInCents: number
     description: string
 }
 
 export function fromJson(json: any): Transaction {
     return {
         id: json.id,
-        amount: json.amount,
-        description: json.description,
+        amountInCents: json.amountInCents,
+        description: json.description ?? '',
         sender: json.sender,
         receiver: json.receiver,
         createdAt: json.createdAt,

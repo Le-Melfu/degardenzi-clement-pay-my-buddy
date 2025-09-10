@@ -84,6 +84,11 @@ export const api = {
         })
     },
 
+    async getBalance(): Promise<number> {
+        const result = await apiRequest<number>('/user/balance')
+        return result || 0
+    },
+
     // Transactions
     async getTransactions(): Promise<Transaction[]> {
         const result = await apiRequest<Transaction[]>('/transactions')

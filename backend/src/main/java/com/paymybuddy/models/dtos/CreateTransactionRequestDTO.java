@@ -16,7 +16,6 @@ public class CreateTransactionRequestDTO {
     @Min(value = 1, message = "Amount must be greater than 0")
     private Long amountInCents;
 
-    @NotBlank(message = "Description is required")
     @Size(max = 255, message = "Description must be less than 255 characters")
     private String description;
 }

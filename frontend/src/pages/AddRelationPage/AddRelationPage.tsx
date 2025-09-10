@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import MainButton from '../../components/atoms/MainButton'
-import TextField from '../../components/atoms/TextField'
+import InputField from '../../components/atoms/InputField'
 import Snackbar from '../../components/atoms/Snackbar'
 import NavBar from '../../components/molecules/NavBar'
 import './AddRelationPage.scss'
@@ -61,7 +61,7 @@ const AddRelationPage: React.FC = () => {
                 <h1 className="page-title">Chercher une relation</h1>
 
                 <div className="search-section">
-                    <TextField
+                    <InputField
                         label="Adresse mail"
                         type="email"
                         placeholder="Saisir une adresse mail"

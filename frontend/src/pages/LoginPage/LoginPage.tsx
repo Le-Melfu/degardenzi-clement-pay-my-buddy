@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Form from '../../components/molecules/Form'
-import TextField from '../../components/atoms/TextField'
+import InputField from '../../components/atoms/InputField'
 import { api } from '../../services/api'
 import { sessionService } from '../../services/sessionService'
 import { User } from '../../models'
@@ -69,7 +69,7 @@ const LoginPage: React.FC = () => {
                 onSubmit={handleSubmit}
             >
                 {error && <div className="error-message">{error}</div>}
-                <TextField
+                <InputField
                     label="Mail"
                     type="email"
                     placeholder="Votre adresse email"
@@ -77,7 +77,7 @@ const LoginPage: React.FC = () => {
                     onChange={setEmail}
                     required
                 />
-                <TextField
+                <InputField
                     label="Mot de passe"
                     type="password"
                     placeholder="Votre mot de passe"

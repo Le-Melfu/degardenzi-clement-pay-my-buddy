@@ -1,9 +1,9 @@
 import React from 'react'
-import './TextField.scss'
+import './InputField.scss'
 
-interface TextFieldProps {
+interface InputFieldProps {
     label: string
-    type?: 'text' | 'email' | 'password'
+    type?: 'text' | 'email' | 'password' | 'number' | 'date'
     placeholder?: string
     value?: string
     onChange?: (value: string) => void
@@ -11,7 +11,7 @@ interface TextFieldProps {
     error?: string
 }
 
-const TextField: React.FC<TextFieldProps> = ({
+const InputField: React.FC<InputFieldProps> = ({
     label,
     type = 'text',
     placeholder,
@@ -45,4 +45,4 @@ const TextField: React.FC<TextFieldProps> = ({
     )
 }
 
-export default TextField
+export default InputField
