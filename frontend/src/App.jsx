@@ -10,6 +10,7 @@ import SessionNotification from './components/SessionNotification'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import ErrorPage from './pages/ErrorPage/ErrorPage'
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>
@@ -43,7 +44,7 @@ createRoot(document.getElementById('root')).render(
                         </ProtectedRoute>
                     }
                 />
-                <Route path="*" element={<HomePage />} />
+                <Route path="*" element={<ErrorPage />} />
             </Routes>
         </BrowserRouter>
     </StrictMode>
