@@ -6,3 +6,7 @@ export {
     fromJson as fromTransactionJson,
 } from './Transaction'
 export { LoginRequest, AddConnectionRequest } from './Auth'
+export {
+    RegisterRequest,
+    fromJson as fromRegisterRequestJson,
+} from './RegisterRequest'

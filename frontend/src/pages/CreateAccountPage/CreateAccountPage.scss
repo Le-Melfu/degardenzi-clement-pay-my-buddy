@@ -1,0 +1,55 @@
+.create-account-page {
+    min-height: 100vh;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+
+    .create-account-container {
+        width: 100%;
+        max-width: 400px;
+        background-color: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+        .logo-button {
+            width: 100%;
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            pointer-events: none;
+            background-color: #ff6b35;
+            border: none;
+            color: white;
+        }
+
+        .create-account-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+
+            .text-field {
+                width: 100%;
+            }
+
+            .main-button {
+                width: 100%;
+                margin-top: 0.5rem;
+            }
+        }
+    }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+    .create-account-page {
+        padding: 1rem;
+
+        .create-account-container {
+            padding: 1.5rem;
+        }
+    }
+}

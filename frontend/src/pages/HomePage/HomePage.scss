@@ -8,3 +8,9 @@
     padding: 1rem;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
+
+.home-page-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}

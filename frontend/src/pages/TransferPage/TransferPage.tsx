@@ -3,6 +3,7 @@ import MainButton from '../../components/atoms/MainButton'
 import InputField from '../../components/atoms/InputField'
 import Snackbar from '../../components/atoms/Snackbar'
 import NavBar from '../../components/molecules/NavBar'
+import TransactionItem from '../../components/molecules/TransactionItem'
 import { useSession } from '../../hooks/useSession'
 import { api } from '../../services/api'
 import { User, Transaction } from '../../models'
@@ -85,21 +86,24 @@ const TransferPage: React.FC = () => {
         }
 
         try {
-            const result = await api.createTransaction({
-                receiverId: selectedConnection.id,
-                description: description,
-                amountInCents: amount,
-            })
-
-            if (result) {
-                showSnackbar('Transfert effectué avec succès', true)
-                setDescription('')
-                setAmount(0)
-                setSelectedConnection(null)
-                loadTransactions() // Recharger l'historique
-            } else {
-                showSnackbar('Erreur lors du transfert', false)
-            }
+            await api
+                .createTransaction({
+                    receiverId: selectedConnection.id,
+                    description: description,
+                    amountInCents: amount,
+                })
+                .then((result) => {
+                    if (result) {
+                        showSnackbar('Transfert effectué avec succès', true)
+                        setDescription('')
+                        setAmount(0)
+                        setSelectedConnection(null)
+                        loadTransactions()
+                        loadBalance()
+                    } else {
+                        showSnackbar('Erreur lors du transfert', false)
+                    }
+                })
         } catch (error) {
             console.log('[DebugClem] - Erreur lors du transfert:', error)
             showSnackbar('Erreur lors du transfert', false)
@@ -112,15 +116,6 @@ const TransferPage: React.FC = () => {
 
     const formatAmount = (amountInCents: number) => {
         return `${amountToText(amountInCents)}€`
-    }
-
-    const getConnectionName = (transaction: Transaction) => {
-        // Déterminer si l'utilisateur actuel est l'expéditeur ou le destinataire
-        if (user && transaction.sender.id === user.id) {
-            return transaction.receiver.username
-        } else {
-            return transaction.sender.username
-        }
     }
 
     return (
@@ -230,22 +225,11 @@ const TransferPage: React.FC = () => {
                         <div className="table-body">
                             {transactions.length > 0 ? (
                                 transactions.map((transaction) => (
-                                    <div
+                                    <TransactionItem
                                         key={transaction.id}
-                                        className="table-row"
-                                    >
-                                        <div className="table-cell">
-                                            {getConnectionName(transaction)}
-                                        </div>
-                                        <div className="table-cell">
-                                            {transaction.description}
-                                        </div>
-                                        <div className="table-cell">
-                                            {formatAmount(
-                                                transaction.amountInCents
-                                            )}
-                                        </div>
-                                    </div>
+                                        transaction={transaction}
+                                        currentUser={user}
+                                    />
                                 ))
                             ) : (
                                 <div className="no-transactions">

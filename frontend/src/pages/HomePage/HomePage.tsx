@@ -9,9 +9,14 @@ const HomePage: React.FC = () => {
         <div className="home-page">
             <h1>Bienvenue sur Pay My Buddy</h1>
             <p>Gérez vos transactions facilement et en toute sécurité</p>
-            <MainButton onClick={() => navigate('/login')}>
-                Se connecter
-            </MainButton>
+            <div className="home-page-buttons">
+                <MainButton onClick={() => navigate('/login')}>
+                    Se connecter
+                </MainButton>
+                <MainButton onClick={() => navigate('/register')}>
+                    Créer un compte
+                </MainButton>
+            </div>
         </div>
     )
 }

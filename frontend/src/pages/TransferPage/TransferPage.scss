@@ -145,36 +145,6 @@
                 }
 
                 .table-body {
-                    .table-row {
-                        display: grid;
-                        grid-template-columns: 1fr 2fr 1fr;
-                        border-bottom: 1px solid #f0f0f0;
-                        transition: background-color 0.2s ease;
-
-                        &:hover {
-                            background-color: #f8f9fa;
-                        }
-
-                        &:last-child {
-                            border-bottom: none;
-                        }
-
-                        .table-cell {
-                            padding: 1rem 1.5rem;
-                            color: #333333;
-                            font-size: 0.95rem;
-
-                            &:first-child {
-                                font-weight: 500;
-                            }
-
-                            &:last-child {
-                                font-weight: 600;
-                                color: #007bff;
-                            }
-                        }
-                    }
-
                     .no-transactions {
                         padding: 3rem 1.5rem;
                         text-align: center;
@@ -208,31 +178,8 @@
 
             .transactions-section {
                 .transactions-table {
-                    .table-header,
-                    .table-body .table-row {
-                        grid-template-columns: 1fr;
-                        gap: 0.5rem;
-                    }
-
                     .table-header {
                         display: none;
-                    }
-
-                    .table-body .table-row {
-                        padding: 1rem;
-                        border: 1px solid #e0e0e0;
-                        border-radius: 8px;
-                        margin-bottom: 0.5rem;
-
-                        .table-cell {
-                            padding: 0.25rem 0;
-
-                            &:before {
-                                content: attr(data-label) ': ';
-                                font-weight: 600;
-                                color: #666666;
-                            }
-                        }
                     }
                 }
             }

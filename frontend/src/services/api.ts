@@ -8,6 +8,7 @@ import {
     CreateTransactionRequest,
     LoginRequest,
     AddConnectionRequest,
+    RegisterRequest,
 } from '../models'
 
 // Fonction utilitaire pour les requêtes
@@ -67,6 +68,17 @@ export const api = {
         })
         if (!result) {
             throw new Error('Échec de la connexion')
+        }
+        return result
+    },
+
+    async register(credentials: RegisterRequest): Promise<User> {
+        const result = await apiRequest<User>('/register', {
+            method: 'POST',
+            body: JSON.stringify(credentials),
+        })
+        if (!result) {
+            throw new Error('Échec de la création de compte')
         }
         return result
     },

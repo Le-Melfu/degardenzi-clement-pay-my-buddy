@@ -4,6 +4,7 @@ import LoginPage from './pages/LoginPage/LoginPage'
 import ProfilePage from './pages/UserPage/ProfilePage'
 import AddRelationPage from './pages/AddRelationPage/AddRelationPage'
 import TransferPage from './pages/TransferPage/TransferPage'
+import CreateAccountPage from './pages/CreateAccountPage/CreateAccountPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import SessionNotification from './components/SessionNotification'
 import { StrictMode } from 'react'
@@ -17,6 +18,7 @@ createRoot(document.getElementById('root')).render(
             <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<CreateAccountPage />} />
                 <Route
                     path="/profile"
                     element={
