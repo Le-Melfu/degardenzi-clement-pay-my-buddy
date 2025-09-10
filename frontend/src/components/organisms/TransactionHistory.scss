@@ -1,0 +1,50 @@
+.transactions-section {
+    margin-top: 2rem;
+
+    h2 {
+        color: #333333;
+        margin-bottom: 1.5rem;
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    .transactions-table {
+        background: white;
+        overflow: hidden;
+
+        .table-header {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+
+            .header-cell {
+                padding: 1rem 1.5rem;
+                font-weight: 600;
+                color: #495057;
+                font-size: 0.9rem;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+        }
+
+        .table-body {
+            .no-transactions {
+                padding: 3rem 1.5rem;
+                text-align: center;
+                color: #6c757d;
+                font-style: italic;
+                background-color: #f8f9fa;
+            }
+        }
+    }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+    .transactions-section {
+        .transactions-table {
+            .table-header {
+                display: none;
+            }
+        }
+    }
+}

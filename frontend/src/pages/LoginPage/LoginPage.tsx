@@ -65,8 +65,9 @@ const LoginPage: React.FC = () => {
         <div className="login-page">
             <Form
                 title="Pay My Buddy"
-                submitButtonText={isLoading ? 'Connexion...' : 'Se connecter'}
+                submitButtonText={'Se connecter'}
                 onSubmit={handleSubmit}
+                isLoading={isLoading}
             >
                 {error && <div className="error-message">{error}</div>}
                 <InputField

@@ -1,11 +1,32 @@
-// Variables
-$primary-color: #646cff;
-$primary-hover: #535bf2;
-$primary-light-hover: #747bff;
+@use 'sass:color';
+
+// Colors
+$primary-color: #207fee;
+$primary-hover: color.adjust($primary-color, $lightness: -10%);
+$primary-light-hover: color.adjust($primary-color, $lightness: -10%);
+
+$secondary-color: #f69f1d;
+$secondary-hover: color.adjust($secondary-color, $lightness: -10%);
+$secondary-light-hover: color.adjust($secondary-color, $lightness: -10%);
+
+$error-color: #ff0000;
+$error-hover: color.adjust($error-color, $lightness: -10%);
+$error-light-hover: color.adjust($error-color, $lightness: -10%);
+
+$black-color: #000000;
+$white-color: #ffffff;
 
 $light-bg: #ffffff;
 $light-text: #213547;
 $light-button-bg: #f9f9f9;
+$light-border: #e0e0e0;
+$dark-border: #404040;
 
+// Sizes
 $border-radius: 8px;
+$font-family: 'Inter', sans-serif;
+$font-size: 16px;
+$font-weight: 400;
+
+// Animations
 $transition-duration: 0.25s;

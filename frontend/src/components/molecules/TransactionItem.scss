@@ -13,9 +13,15 @@
     }
 
     .table-cell {
+        word-wrap: break-word;
+        overflow: hidden;
+        overflow-wrap: break-word;
+        white-space: normal;
+        width: 100%;
         padding: 1rem 1.5rem;
         color: #333333;
         font-size: 0.95rem;
+        box-sizing: border-box;
 
         &:first-child {
             font-weight: 500;

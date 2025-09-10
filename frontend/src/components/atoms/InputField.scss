@@ -1,13 +1,17 @@
 @use '../../assets/styles/variables' as variables;
 
-.text-field {
+.input-field {
     display: flex;
     flex-direction: column;
 
+    & > * {
+        font-weight: 700;
+    }
+
     &__label {
-        font-weight: 500;
         color: variables.$light-text;
         font-size: 0.9rem;
+        display: none;
     }
 
     &__required {
@@ -20,7 +24,7 @@
         border: 1px solid #ddd;
         border-radius: variables.$border-radius;
         font-size: 1rem;
-        font-family: inherit;
+
         transition: border-color variables.$transition-duration;
         background-color: #fff;
         color: #333;
@@ -43,7 +47,7 @@
     }
 }
 
-.text-field {
+.input-field {
     &__label {
         color: variables.$light-text;
     }
@@ -52,16 +56,5 @@
         background-color: #fff;
         border-color: #ddd;
         color: #333;
-    }
-}
-
-// Dark theme
-@media (prefers-color-scheme: dark) {
-    .text-field {
-        &__input {
-            background-color: #fff;
-            color: #333;
-            border-color: #ddd;
-        }
     }
 }

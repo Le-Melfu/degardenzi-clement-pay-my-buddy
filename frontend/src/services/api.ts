@@ -11,6 +11,14 @@ import {
     RegisterRequest,
 } from '../models'
 
+// Interface pour les réponses d'erreur de l'API
+interface ApiErrorResponse {
+    timestamp: string
+    status: number
+    error: string
+    message: string
+}
+
 // Fonction utilitaire pour les requêtes
 async function apiRequest<T>(
     endpoint: string,
@@ -35,13 +43,17 @@ async function apiRequest<T>(
         const response = await fetch(url, config)
 
         if (!response.ok) {
-            // Gestion spécifique des erreurs d'authentification
             if (response.status === 401) {
-                // Session expirée ou non authentifié
-                console.warn('Session expirée ou non authentifié')
                 throw new Error('SESSION_EXPIRED')
             }
-            throw new Error(`Erreur ${response.status}: ${response.statusText}`)
+
+            const contentType = response.headers.get('content-type')
+            if (contentType?.includes('application/json')) {
+                const errorData: ApiErrorResponse = await response.json()
+                throw new Error(errorData.message || response.statusText)
+            }
+
+            throw new Error(response.statusText)
         }
 
         // Vérifier si la réponse a du contenu avant de parser le JSON

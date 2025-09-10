@@ -3,9 +3,11 @@ import './InputField.scss'
 
 interface InputFieldProps {
     label: string
+    ariaHidden?: boolean
     type?: 'text' | 'email' | 'password' | 'number' | 'date'
     placeholder?: string
     value?: string
+    maxLength?: number
     onChange?: (value: string) => void
     required?: boolean
     error?: string
@@ -14,8 +16,10 @@ interface InputFieldProps {
 const InputField: React.FC<InputFieldProps> = ({
     label,
     type = 'text',
+    ariaHidden = false,
     placeholder,
     value = '',
+    maxLength = 255,
     onChange,
     required = false,
     error,
@@ -25,22 +29,26 @@ const InputField: React.FC<InputFieldProps> = ({
     }
 
     return (
-        <div className="text-field">
-            <label className="text-field__label">
+        <div className="input-field">
+            <label
+                className={`input-field__label ${ariaHidden ? 'hidden' : ''}`}
+                aria-hidden={ariaHidden}
+            >
                 {label}
-                {required && <span className="text-field__required">*</span>}
+                {required && <span className="input-field__required">*</span>}
             </label>
             <input
                 type={type}
-                className={`text-field__input ${
-                    error ? 'text-field__input--error' : ''
+                className={`input-field__input ${
+                    error ? 'input-field__input--error' : ''
                 }`}
                 placeholder={placeholder}
                 value={value}
+                maxLength={type === 'text' ? maxLength : undefined}
                 onChange={handleChange}
                 required={required}
             />
-            {error && <span className="text-field__error">{error}</span>}
+            {error && <span className="input-field__error">{error}</span>}
         </div>
     )
 }

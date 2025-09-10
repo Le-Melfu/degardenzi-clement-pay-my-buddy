@@ -35,7 +35,6 @@ public class TransactionServiceImpl implements TransactionService {
         this.loggingService = loggingService;
     }
 
-    @Transactional
     @Override
     public Transaction createTransaction(User sender, CreateTransactionRequestDTO transactionRequest) {
         Transaction savedTransaction = null;
@@ -69,8 +68,7 @@ public class TransactionServiceImpl implements TransactionService {
                 savedTransaction.setDescription("Insufficient balance. Available: " + sender.getBalanceInCents()
                         + " cents, Required: " + transactionRequest.getAmountInCents() + " cents");
                 transactionRepository.save(savedTransaction);
-                throw new InsufficientBalanceException("Insufficient balance. Available: " + sender.getBalanceInCents()
-                        + " cents, Required: " + transactionRequest.getAmountInCents() + " cents");
+                throw new InsufficientBalanceException("Solde insuffisant");
             }
             loggingService.info("Balance check passed. Sender balance: " + sender.getBalanceInCents() + " cents");
 
@@ -90,8 +88,8 @@ public class TransactionServiceImpl implements TransactionService {
             return finalTransaction;
 
         } catch (Exception e) {
-            // Update transaction to FAILED if not already set
-            if (savedTransaction != null && savedTransaction.getStatus() != TransactionStatus.FAILED) {
+            // Update transaction to FAILED if it exists
+            if (savedTransaction != null) {
                 savedTransaction.setStatus(TransactionStatus.FAILED);
                 savedTransaction.setDescription("Transaction failed: " + e.getMessage());
                 transactionRepository.save(savedTransaction);

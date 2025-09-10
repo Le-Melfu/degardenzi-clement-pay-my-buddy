@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import MainButton from '../../components/atoms/MainButton'
-import InputField from '../../components/atoms/InputField'
 import Snackbar from '../../components/atoms/Snackbar'
 import NavBar from '../../components/molecules/NavBar'
-import TransactionItem from '../../components/molecules/TransactionItem'
+import UserBalance from '../../components/organisms/UserBalance'
+import TransferForm from '../../components/organisms/TransferForm'
+import TransactionHistory from '../../components/organisms/TransactionHistory'
 import { useSession } from '../../hooks/useSession'
 import { api } from '../../services/api'
 import { User, Transaction } from '../../models'
@@ -28,7 +28,6 @@ const TransferPage: React.FC = () => {
         success: false,
     })
 
-    const [addFundsAmount, setAddFundsAmount] = useState(0)
     const [balance, setBalance] = useState(0) // Toujours en centimes
 
     const showSnackbar = (message: string, success: boolean) => {
@@ -38,6 +37,8 @@ const TransferPage: React.FC = () => {
             success,
         })
     }
+
+    const [transactionProcessing, setTransactionProcessing] = useState(false)
 
     const hideSnackbar = () => {
         setSnackbar((prev) => ({ ...prev, isVisible: false }))
@@ -86,6 +87,7 @@ const TransferPage: React.FC = () => {
         }
 
         try {
+            setTransactionProcessing(true)
             await api
                 .createTransaction({
                     receiverId: selectedConnection.id,
@@ -105,140 +107,33 @@ const TransferPage: React.FC = () => {
                     }
                 })
         } catch (error) {
-            console.log('[DebugClem] - Erreur lors du transfert:', error)
-            showSnackbar('Erreur lors du transfert', false)
+            showSnackbar(error.message, false)
+        } finally {
+            setTransactionProcessing(false)
         }
-    }
-
-    const amountToText = (amountInCents: number) => {
-        return (amountInCents / 100).toFixed(2)
-    }
-
-    const formatAmount = (amountInCents: number) => {
-        return `${amountToText(amountInCents)}€`
     }
 
     return (
         <div className="transfer-page">
             <NavBar activePage="transfer" />
-            <div className="transfer-page-user-content">
-                <div className="transfer-page-user-content-header">
-                    <h1>Mon profil</h1>
-                    <p>Solde : {formatAmount(balance)}</p>
-                    <div className="add-funds-section">
-                        <InputField
-                            label="Montant à ajouter"
-                            type="number"
-                            placeholder="0.00"
-                            value={amountToText(addFundsAmount)}
-                            onChange={(value) =>
-                                setAddFundsAmount(
-                                    Math.round(parseFloat(value) * 100)
-                                )
-                            }
-                        />
-                        <MainButton
-                            variant="secondary"
-                            onClick={() => {
-                                api.addMoney(addFundsAmount).then(() => {
-                                    loadBalance()
-                                    setAddFundsAmount(0)
-                                })
-                            }}
-                        >
-                            Ajouter des fonds
-                        </MainButton>
-                    </div>
-                </div>
-            </div>
+            <UserBalance balance={balance} onBalanceUpdate={loadBalance} />
 
             <div className="transfer-content">
-                {/* Formulaire de transfert */}
-                <div className="transfer-form">
-                    <div className="form-row">
-                        <div className="form-field">
-                            <label>Sélectionner une relation</label>
-                            <select
-                                value={selectedConnection?.id || ''}
-                                onChange={(e) => {
-                                    const connId = parseInt(e.target.value)
-                                    const conn = connections.find(
-                                        (c) => c.id === connId
-                                    )
-                                    setSelectedConnection(conn || null)
-                                }}
-                                className="connection-select"
-                            >
-                                <option value="">Choisir une relation</option>
-                                {connections.map((conn) => (
-                                    <option key={conn.id} value={conn.id}>
-                                        {conn.username}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-
-                        <div className="form-field">
-                            <InputField
-                                label="Description"
-                                placeholder="Description du transfert"
-                                value={description}
-                                onChange={setDescription}
-                            />
-                        </div>
-
-                        <div className="form-field amount-field">
-                            <InputField
-                                label="Montant"
-                                type="number"
-                                placeholder="0.00"
-                                value={amountToText(amount)}
-                                onChange={(value) =>
-                                    setAmount(
-                                        Math.round(parseFloat(value) * 100)
-                                    )
-                                }
-                            />
-                        </div>
-
-                        <div className="form-field">
-                            <MainButton
-                                variant="primary"
-                                onClick={handleTransfer}
-                                disabled={!selectedConnection || !amount}
-                            >
-                                Payer
-                            </MainButton>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Historique des transactions */}
-                <div className="transactions-section">
-                    <h2>Mes Transactions</h2>
-                    <div className="transactions-table">
-                        <div className="table-header">
-                            <div className="header-cell">Relations</div>
-                            <div className="header-cell">Description</div>
-                            <div className="header-cell">Montant</div>
-                        </div>
-                        <div className="table-body">
-                            {transactions.length > 0 ? (
-                                transactions.map((transaction) => (
-                                    <TransactionItem
-                                        key={transaction.id}
-                                        transaction={transaction}
-                                        currentUser={user}
-                                    />
-                                ))
-                            ) : (
-                                <div className="no-transactions">
-                                    Aucune transaction pour le moment
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
+                <TransferForm
+                    connections={connections}
+                    selectedConnection={selectedConnection}
+                    onConnectionChange={setSelectedConnection}
+                    description={description}
+                    onDescriptionChange={setDescription}
+                    amount={amount}
+                    onAmountChange={setAmount}
+                    onTransfer={handleTransfer}
+                    isLoading={transactionProcessing}
+                />
+                <TransactionHistory
+                    transactions={transactions}
+                    currentUser={user}
+                />
             </div>
 
             <Snackbar

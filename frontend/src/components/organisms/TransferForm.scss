@@ -1,0 +1,79 @@
+.transfer-form {
+    background: white;
+    padding: 2rem;
+    margin-bottom: 2rem;
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr auto;
+        gap: 1rem;
+        align-items: end;
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+
+            .connection-select {
+                padding: 0.75rem 1rem;
+                border: 2px solid #e9ecef;
+                border-radius: 8px;
+                font-size: 1rem;
+                background-color: white;
+                color: #333333;
+                transition: border-color 0.2s ease;
+
+                &:focus {
+                    outline: none;
+                    border-color: #007bff;
+                    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+                }
+
+                &:hover {
+                    border-color: #ced4da;
+                }
+            }
+
+            &.amount-field {
+                .input-field {
+                    text-align: right;
+                }
+            }
+
+            .hidden {
+                position: absolute;
+                left: -10000px;
+                width: 1px;
+                height: 1px;
+                overflow: hidden;
+            }
+        }
+    }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+    .transfer-form {
+        padding: 1.5rem;
+
+        .form-row {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+
+            .form-field {
+                &:last-child {
+                    margin-top: 0.5rem;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .transfer-form {
+        padding: 1rem;
+
+        .form-row {
+            gap: 1rem;
+        }
+    }
+}

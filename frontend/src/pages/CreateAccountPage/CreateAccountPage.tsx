@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import MainButton from '../../components/atoms/MainButton'
 import InputField from '../../components/atoms/InputField'
+import Form from '../../components/molecules/Form'
 import Snackbar from '../../components/atoms/Snackbar'
 import { api } from '../../services/api'
 import './CreateAccountPage.scss'
@@ -65,11 +66,11 @@ const CreateAccountPage: React.FC = () => {
     return (
         <div className="create-account-page">
             <div className="create-account-container">
-                <MainButton variant="primary" className="logo-button" disabled>
-                    Pay My Buddy
-                </MainButton>
-
-                <form onSubmit={handleSubmit} className="create-account-form">
+                <Form
+                    title="Pay My Buddy"
+                    submitButtonText={isLoading ? 'Création...' : "S'inscrire"}
+                    onSubmit={handleSubmit}
+                >
                     <InputField
                         label="Username"
                         placeholder="Username"
@@ -95,15 +96,7 @@ const CreateAccountPage: React.FC = () => {
                         onChange={setPassword}
                         required
                     />
-
-                    <MainButton
-                        variant="primary"
-                        type="submit"
-                        disabled={isLoading}
-                    >
-                        {isLoading ? 'Création...' : "S'inscrire"}
-                    </MainButton>
-                </form>
+                </Form>
             </div>
 
             <Snackbar

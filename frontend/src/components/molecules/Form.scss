@@ -1,63 +1,47 @@
 @use '../../assets/styles/variables' as variables;
 
 .form {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 2rem;
-    background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 4rem;
+    background-color: variables.$light-bg;
+    border: 1px solid variables.$black-color;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.08);
+
+    & > * {
+        font-weight: 700;
+    }
 
     &__header {
         text-align: center;
-        margin-bottom: 2rem;
+        margin-bottom: 1rem;
     }
 
     &__title {
-        background-color: #ff6b35;
-        color: white;
-        padding: 0.75rem 1.5rem;
-        border-radius: 8px;
+        padding: 1rem;
+        background-color: variables.$secondary-color;
+        border-radius: variables.$border-radius;
+        color: variables.$white-color;
         font-size: 1.5rem;
-        font-weight: 600;
         margin: 0;
-        display: inline-block;
     }
 
     &__content {
         display: flex;
         flex-direction: column;
+        gap: 1.5rem;
     }
 
     &__fields {
-        margin-bottom: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
     }
 
     &__actions {
         display: flex;
         justify-content: center;
-    }
-}
-
-// Light theme
-@media (prefers-color-scheme: light) {
-    .form {
-        background-color: #fff;
-        border-color: #e0e0e0;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    }
-}
-
-// Dark theme
-@media (prefers-color-scheme: dark) {
-    .form {
-        background-color: #2a2a2a;
-        border-color: #404040;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-
-        &__title {
-            background-color: #ff6b35;
-        }
+        margin-top: 0.5rem;
     }
 }

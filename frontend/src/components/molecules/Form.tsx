@@ -8,6 +8,7 @@ interface FormProps {
     submitButtonText: string
     onSubmit: (e: React.FormEvent) => void
     className?: string
+    isLoading?: boolean
 }
 
 const Form: React.FC<FormProps> = ({
@@ -16,6 +17,7 @@ const Form: React.FC<FormProps> = ({
     submitButtonText,
     onSubmit,
     className = '',
+    isLoading = false,
 }) => {
     const formClasses = ['form', className].filter(Boolean).join(' ')
 
@@ -29,7 +31,11 @@ const Form: React.FC<FormProps> = ({
                 <div className="form__fields">{children}</div>
 
                 <div className="form__actions">
-                    <MainButton type="submit" size="large">
+                    <MainButton
+                        type="submit"
+                        size="large"
+                        isLoading={isLoading}
+                    >
                         {submitButtonText}
                     </MainButton>
                 </div>

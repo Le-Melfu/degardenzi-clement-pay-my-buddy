@@ -1,5 +1,6 @@
 import React from 'react'
 import './MainButton.scss'
+import CircularProgressIndicator from './CircularProgressIndicator'
 
 interface MainButtonProps {
     children: React.ReactNode
@@ -9,6 +10,7 @@ interface MainButtonProps {
     disabled?: boolean
     onClick?: () => void
     className?: string
+    isLoading?: boolean
 }
 
 const MainButton: React.FC<MainButtonProps> = ({
@@ -19,6 +21,7 @@ const MainButton: React.FC<MainButtonProps> = ({
     disabled = false,
     onClick,
     className = '',
+    isLoading = false,
 }) => {
     const buttonClasses = [
         'main-button',
@@ -36,7 +39,7 @@ const MainButton: React.FC<MainButtonProps> = ({
             disabled={disabled}
             onClick={onClick}
         >
-            {children}
+            {isLoading ? <CircularProgressIndicator color="white" /> : children}
         </button>
     )
 }

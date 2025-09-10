@@ -8,6 +8,10 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    font-family: variables.$font-family;
+    font-size: variables.$font-size;
+    font-weight: variables.$font-weight;
+    @include mixins.font-smoothing;
 }
 
 // Root element
@@ -43,9 +47,6 @@ body {
     padding: 0;
     display: flex;
     flex-direction: column;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
-        Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    font-size: 1rem;
     line-height: 1.5;
     color-scheme: light dark;
     color: variables.$light-text;
@@ -135,18 +136,7 @@ img {
     display: block;
 }
 
-// Light theme
-@media (prefers-color-scheme: light) {
-    body {
-        color: variables.$light-text;
-        background-color: variables.$light-bg;
-    }
-
-    a:hover {
-        color: variables.$primary-light-hover;
-    }
-
-    button {
-        background-color: variables.$light-button-bg;
-    }
+// Utils
+.hidden {
+    display: none;
 }
