@@ -102,11 +102,6 @@ const TransferPage: React.FC = () => {
                 .then((result) => {
                     if (result) {
                         showSnackbar('Transfert effectué avec succès', true)
-                        setDescription('')
-                        setAmount(0)
-                        setSelectedConnection(null)
-                        loadTransactions()
-                        loadBalance()
                     } else {
                         showSnackbar('Erreur lors du transfert', false)
                     }
@@ -114,6 +109,11 @@ const TransferPage: React.FC = () => {
         } catch (error) {
             showSnackbar(error.message, false)
         } finally {
+            setDescription('')
+            setAmount(0)
+            setSelectedConnection(null)
+            loadTransactions()
+            loadBalance()
             setTransactionProcessing(false)
         }
     }

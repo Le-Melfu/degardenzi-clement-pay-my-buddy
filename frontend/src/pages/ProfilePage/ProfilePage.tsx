@@ -3,6 +3,7 @@ import MainButton from '../../components/atoms/MainButton'
 import NavBar from '../../components/molecules/NavBar'
 import { useSession } from '../../hooks/useSession'
 import './ProfilePage.scss'
+import CircularProgressIndicator from '../../components/atoms/CircularProgressIndicator'
 
 const ProfilePage: React.FC = () => {
     const { user, logout, isLoading } = useSession()

@@ -7,6 +7,7 @@ export interface Transaction {
     sender: User
     receiver: User
     createdAt: string
+    status: string
 }
 
 export interface CreateTransactionRequest {
@@ -23,5 +24,6 @@ export function fromJson(json: any): Transaction {
         sender: json.sender,
         receiver: json.receiver,
         createdAt: json.createdAt,
+        status: json.status,
     }
 }

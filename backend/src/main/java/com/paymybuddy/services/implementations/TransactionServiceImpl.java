@@ -91,7 +91,7 @@ public class TransactionServiceImpl implements TransactionService {
             // Update transaction to FAILED if it exists
             if (savedTransaction != null) {
                 savedTransaction.setStatus(TransactionStatus.FAILED);
-                savedTransaction.setDescription("Transaction failed: " + e.getMessage());
+                savedTransaction.setDescription("Transaction échouée: " + e.getMessage());
                 transactionRepository.save(savedTransaction);
                 loggingService
                         .error("Transaction failed with ID: " + savedTransaction.getId() + " - " + e.getMessage());

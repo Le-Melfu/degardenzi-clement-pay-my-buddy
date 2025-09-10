@@ -34,7 +34,11 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
             <div className="table-cell">{transaction.description}</div>
             <div
                 className={`table-cell amount-cell ${
-                    isOutgoing ? 'outgoing' : 'incoming'
+                    transaction.status === 'SUCCESS'
+                        ? isOutgoing
+                            ? 'outgoing'
+                            : 'incoming'
+                        : 'failed'
                 }`}
             >
                 {formatAmount(transaction.amountInCents)}

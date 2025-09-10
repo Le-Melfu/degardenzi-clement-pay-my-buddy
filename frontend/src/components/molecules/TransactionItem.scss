@@ -1,3 +1,5 @@
+@use '../../assets/styles/variables' as variables;
+
 .table-row {
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
@@ -33,11 +35,16 @@
 
         &.amount-cell {
             &.outgoing {
-                color: #dc3545; // Rouge pour les sorties
+                color: variables.$error-color; // Rouge pour les sorties
             }
 
             &.incoming {
-                color: #28a745; // Vert pour les entrées
+                color: variables.$success-color; // Vert pour les entrées
+            }
+
+            &.failed {
+                text-decoration: line-through;
+                color: variables.$text-muted; // Rouge pour les échecs
             }
         }
     }

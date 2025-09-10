@@ -1,7 +1,7 @@
 import './App.scss'
 import HomePage from './pages/HomePage/HomePage'
 import LoginPage from './pages/LoginPage/LoginPage'
-import ProfilePage from './pages/UserPage/ProfilePage'
+import ProfilePage from './pages/ProfilePage/ProfilePage'
 import AddRelationPage from './pages/AddRelationPage/AddRelationPage'
 import TransferPage from './pages/TransferPage/TransferPage'
 import CreateAccountPage from './pages/CreateAccountPage/CreateAccountPage'
