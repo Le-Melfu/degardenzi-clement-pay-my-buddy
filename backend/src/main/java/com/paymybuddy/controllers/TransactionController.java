@@ -47,8 +47,7 @@ public class TransactionController {
             loggingService.error("TransactionController: User not found: " + userEmail);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        loggingService.info("TransactionController: Creating transaction for user: " + user.get().getId()
-                + "To receiver: " + request.getReceiverId());
+
         if (request.getReceiverId() == user.get().getId()) {
             loggingService.error("TransactionController: User not allowed to create transaction: " + userEmail);
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();

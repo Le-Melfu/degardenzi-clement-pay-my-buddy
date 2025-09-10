@@ -41,7 +41,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         try {
             loggingService.info("Starting transaction creation for amount: " + transactionRequest.getAmountInCents()
-                    + " cents between user " + sender.getId() + " and user "
+                    + " cents from user " + sender.getId() + " to user "
                     + transactionRequest.getReceiverId());
 
             // Amount validation
@@ -51,7 +51,7 @@ public class TransactionServiceImpl implements TransactionService {
 
             User receiver = userRepository.findById(transactionRequest.getReceiverId())
                     .orElseThrow(() -> new UserNotFoundException(
-                            "Receiver not found with ID: " + transactionRequest.getReceiverId()));
+                            "user not found with ID: " + transactionRequest.getReceiverId()));
 
             Transaction transaction = new Transaction();
             transaction.setStatus(TransactionStatus.PENDING);
@@ -60,14 +60,11 @@ public class TransactionServiceImpl implements TransactionService {
             transaction.setSender(sender);
             transaction.setReceiver(receiver);
 
+            // Save transaction
             savedTransaction = transactionRepository.save(transaction);
 
             // Balance check
             if (sender.getBalanceInCents() < transactionRequest.getAmountInCents()) {
-                savedTransaction.setStatus(TransactionStatus.FAILED);
-                savedTransaction.setDescription("Insufficient balance. Available: " + sender.getBalanceInCents()
-                        + " cents, Required: " + transactionRequest.getAmountInCents() + " cents");
-                transactionRepository.save(savedTransaction);
                 throw new InsufficientBalanceException("Solde insuffisant");
             }
             loggingService.info("Balance check passed. Sender balance: " + sender.getBalanceInCents() + " cents");

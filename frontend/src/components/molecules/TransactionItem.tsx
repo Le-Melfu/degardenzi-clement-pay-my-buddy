@@ -33,7 +33,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
             <div className="table-cell">{getConnectionName(transaction)}</div>
             <div className="table-cell">{transaction.description}</div>
             <div
-                className={`table-cell amount-cell ${
+                className={`table-cell align-right amount-cell ${
                     transaction.status === 'SUCCESS'
                         ? isOutgoing
                             ? 'outgoing'

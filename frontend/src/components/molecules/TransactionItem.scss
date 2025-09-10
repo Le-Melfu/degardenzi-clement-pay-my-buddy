@@ -33,6 +33,11 @@
             font-weight: 600;
         }
 
+        &.align-right {
+            text-align: right;
+            padding-right: 2.5rem;
+        }
+
         &.amount-cell {
             &.outgoing {
                 color: variables.$error-color; // Rouge pour les sorties
