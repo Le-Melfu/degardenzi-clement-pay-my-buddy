@@ -14,7 +14,7 @@ import {
 async function apiRequest<T>(
     endpoint: string,
     options: RequestInit = {}
-): Promise<T> {
+): Promise<T | null> {
     const url = `${API_BASE_URL}${endpoint}`
 
     const defaultHeaders: HeadersInit = {
@@ -34,10 +34,23 @@ async function apiRequest<T>(
         const response = await fetch(url, config)
 
         if (!response.ok) {
+            // Gestion spécifique des erreurs d'authentification
+            if (response.status === 401) {
+                // Session expirée ou non authentifié
+                console.warn('Session expirée ou non authentifié')
+                throw new Error('SESSION_EXPIRED')
+            }
             throw new Error(`Erreur ${response.status}: ${response.statusText}`)
         }
 
-        return await response.json()
+        // Vérifier si la réponse a du contenu avant de parser le JSON
+        const contentType = response.headers.get('content-type')
+        if (contentType && contentType.includes('application/json')) {
+            const text = await response.text()
+            return text ? JSON.parse(text) : null
+        }
+
+        return null
     } catch (error) {
         console.error('Erreur API:', error)
         throw error
@@ -48,10 +61,14 @@ async function apiRequest<T>(
 export const api = {
     // Authentification
     async login(credentials: LoginRequest): Promise<User> {
-        return apiRequest<User>('/login', {
+        const result = await apiRequest<User>('/login', {
             method: 'POST',
             body: JSON.stringify(credentials),
         })
+        if (!result) {
+            throw new Error('Échec de la connexion')
+        }
+        return result
     },
 
     async logout(): Promise<void> {
@@ -61,7 +78,7 @@ export const api = {
     },
 
     async addMoney(amountInCents: number): Promise<void> {
-        return apiRequest('/add-money', {
+        await apiRequest('/add-money', {
             method: 'POST',
             body: JSON.stringify(amountInCents),
         })
@@ -69,31 +86,47 @@ export const api = {
 
     // Transactions
     async getTransactions(): Promise<Transaction[]> {
-        return apiRequest<Transaction[]>('/transactions')
+        const result = await apiRequest<Transaction[]>('/transactions')
+        return result || []
     },
 
     async getTransaction(transactionId: number): Promise<Transaction> {
-        return apiRequest<Transaction>(`/transactions/${transactionId}`)
+        const result = await apiRequest<Transaction>(
+            `/transactions/${transactionId}`
+        )
+        if (!result) {
+            throw new Error('Transaction non trouvée')
+        }
+        return result
     },
 
     async createTransaction(
         transaction: CreateTransactionRequest
     ): Promise<Transaction> {
-        return apiRequest<Transaction>('/transaction', {
+        const result = await apiRequest<Transaction>('/transaction', {
             method: 'POST',
             body: JSON.stringify(transaction),
         })
+        if (!result) {
+            throw new Error('Échec de la création de transaction')
+        }
+        return result
     },
 
     // Connexions
     async getConnections(): Promise<User[]> {
-        return apiRequest<User[]>('/connections')
+        const result = await apiRequest<User[]>('/connections')
+        return result || []
     },
 
     async addConnection(request: AddConnectionRequest): Promise<User> {
-        return apiRequest<User>('/add-connection', {
+        const result = await apiRequest<User>('/add-connection', {
             method: 'POST',
             body: JSON.stringify(request),
         })
+        if (!result) {
+            throw new Error("Échec de l'ajout de connexion")
+        }
+        return result
     },
 }

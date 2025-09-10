@@ -3,8 +3,10 @@ import { useNavigate } from 'react-router-dom'
 import Form from '../../components/molecules/Form'
 import TextField from '../../components/atoms/TextField'
 import { api } from '../../services/api'
+import { sessionService } from '../../services/sessionService'
 import { User } from '../../models'
 import './LoginPage.scss'
+import Snackbar from '../../components/atoms/Snackbar'
 
 const LoginPage: React.FC = () => {
     const [email, setEmail] = useState('')
@@ -12,6 +14,27 @@ const LoginPage: React.FC = () => {
     const [error, setError] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
+    const [snackbar, setSnackbar] = useState<{
+        isVisible: boolean
+        message: string
+        success: boolean
+    }>({
+        isVisible: false,
+        message: '',
+        success: false,
+    })
+
+    const showSnackbar = (message: string, success: boolean) => {
+        setSnackbar({
+            isVisible: true,
+            message,
+            success,
+        })
+    }
+
+    const hideSnackbar = () => {
+        setSnackbar((prev) => ({ ...prev, isVisible: false }))
+    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -23,11 +46,14 @@ const LoginPage: React.FC = () => {
                 email,
                 password,
             })
-            console.log('Login successful:', user)
+            // Sauvegarder l'utilisateur en local
+            sessionService.saveUser(user)
 
             // Rediriger vers la page user après connexion
-            navigate('/profile', { state: { user } })
+            showSnackbar('Connexion réussie', true)
+            navigate('/profile')
         } catch (error) {
+            showSnackbar('Connexion échouée', false)
             console.error('Login failed:', error)
             setError('Email ou mot de passe incorrect')
         } finally {
@@ -60,6 +86,12 @@ const LoginPage: React.FC = () => {
                     required
                 />
             </Form>
+            <Snackbar
+                message={snackbar.message}
+                success={snackbar.success}
+                isVisible={snackbar.isVisible}
+                onClose={hideSnackbar}
+            />
         </div>
     )
 }

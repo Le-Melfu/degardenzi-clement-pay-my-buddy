@@ -24,7 +24,16 @@ import com.paymybuddy.logging.LoggingService;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 @RestController
+@Tag(name = "User Management", description = "API pour la gestion des utilisateurs")
 public class UserController {
 
     private final UserService userService;
@@ -39,6 +48,11 @@ public class UserController {
     }
 
     @PostMapping("/register")
+    @Operation(summary = "Enregistrer un nouvel utilisateur", description = "Créer un nouveau compte utilisateur")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Utilisateur créé avec succès", content = @Content(schema = @Schema(implementation = PublicUserDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Email déjà utilisé")
+    })
     public PublicUserDTO register(@RequestBody @Valid User user) {
         if (userService.findByEmail(user.getEmail()).isPresent()) {
 
@@ -48,6 +62,11 @@ public class UserController {
     }
 
     @PostMapping("/login")
+    @Operation(summary = "Connexion utilisateur", description = "Authentifier un utilisateur existant")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Connexion réussie", content = @Content(schema = @Schema(implementation = PublicUserDTO.class))),
+            @ApiResponse(responseCode = "401", description = "Identifiants invalides")
+    })
     public ResponseEntity<PublicUserDTO> login(@RequestBody @Valid UserCredentialsDTO userCredentials,
             HttpServletRequest request) {
         if (authenticationService.authenticate(userCredentials, request)) {
@@ -60,6 +79,13 @@ public class UserController {
     }
 
     @PostMapping("/log-out")
+    @Operation(summary = "Déconnexion utilisateur", description = "Déconnecter l'utilisateur actuellement connecté")
+    @SecurityRequirement(name = "sessionAuth")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Déconnexion réussie"),
+            @ApiResponse(responseCode = "401", description = "Non authentifié"),
+            @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
+    })
     public ResponseEntity<Void> logout(
             @AuthenticationPrincipal org.springframework.security.core.userdetails.User principal,
             HttpServletRequest request) {
@@ -79,15 +105,26 @@ public class UserController {
                 session.invalidate();
             }
 
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok()
+                    .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                    .build();
         } catch (Exception e) {
             loggingService.error("UserController: Logout error - " + e.getMessage());
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                    .build();
         }
     }
 
     @PostMapping("/add-money")
+    @Operation(summary = "Ajouter de l'argent au compte", description = "Ajouter un montant au solde de l'utilisateur connecté")
+    @SecurityRequirement(name = "sessionAuth")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Argent ajouté avec succès"),
+            @ApiResponse(responseCode = "401", description = "Utilisateur non authentifié"),
+            @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
+    })
     public ResponseEntity<Void> addMoney(@RequestBody @Valid Long amountInCents,
             @AuthenticationPrincipal org.springframework.security.core.userdetails.User principal) {
 
