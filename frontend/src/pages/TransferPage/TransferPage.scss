@@ -2,9 +2,11 @@
 @use '../../assets/styles/variables' as variables;
 
 .transfer-page {
-    min-height: 100vh;
+    height: 100vh;
     background-color: #ffffff;
     padding: 2rem;
+    display: flex;
+    flex-direction: column;
 
     .transfer-page-user-content {
         max-width: 1200px;
@@ -52,104 +54,20 @@
     .transfer-content {
         max-width: 1200px;
         margin: 0 auto;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0; // Important pour que flex fonctionne correctement
 
         .transfer-form {
-            padding: 2rem;
-            margin-bottom: 3rem;
-
-            .form-row {
-                display: flex;
-                gap: 1.5rem;
-                align-items: end;
-                flex-wrap: wrap;
-
-                .form-field {
-                    flex: 1;
-                    min-width: 200px;
-
-                    label {
-                        font-weight: 500;
-                        color: variables.$light-text;
-                        margin-bottom: 0.5rem;
-                        font-size: 0.9rem;
-                    }
-
-                    .connection-select {
-                        width: 100%;
-                        padding: 12px 16px;
-                        border: 2px solid variables.$light-border;
-                        border-radius: 8px;
-                        font-size: 1rem;
-                        background-color: white;
-                        cursor: pointer;
-                        transition: border-color 0.2s ease;
-                        color: variables.$light-text;
-
-                        &:focus {
-                            outline: none;
-                            border-color: variables.$primary-color;
-                        }
-
-                        &:hover {
-                            border-color: variables.$primary-color;
-                        }
-
-                        option {
-                            color: variables.$light-text;
-                            background-color: white;
-                        }
-                    }
-
-                    .main-button {
-                        width: 100%;
-                        min-width: 120px;
-                    }
-
-                    .amount-field {
-                        .text-field__input {
-                            padding-right: 40px;
-                        }
-                    }
-                }
-            }
+            flex-shrink: 0; // Empêche le formulaire de rétrécir
         }
 
         .transactions-section {
-            h2 {
-                font-size: 1.5rem;
-                font-weight: 600;
-                color: variables.$light-text;
-                margin-bottom: 1.5rem;
-            }
-
-            .transactions-table {
-                background-color: variables.$white-color;
-                border-radius: 12px;
-                overflow: hidden;
-
-                .table-header {
-                    display: grid;
-                    grid-template-columns: 1fr 2fr 1fr;
-
-                    .header-cell {
-                        padding: 1rem 1.5rem;
-                        font-weight: 600;
-                        color: variables.$light-text;
-                        font-size: 0.9rem;
-                        text-transform: uppercase;
-                        letter-spacing: 0.5px;
-                    }
-                }
-
-                .table-body {
-                    .no-transactions {
-                        padding: 3rem 1.5rem;
-                        text-align: center;
-                        color: variables.$light-text;
-                        font-style: italic;
-                    }
-                }
-            }
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0; // Important pour que flex fonctionne correctement
         }
     }
 }
@@ -158,28 +76,5 @@
 @media (max-width: 768px) {
     .transfer-page {
         padding: 1rem;
-
-        .transfer-content {
-            .transfer-form {
-                padding: 1.5rem;
-
-                .form-row {
-                    flex-direction: column;
-                    align-items: stretch;
-
-                    .form-field {
-                        min-width: auto;
-                    }
-                }
-            }
-
-            .transactions-section {
-                .transactions-table {
-                    .table-header {
-                        display: none;
-                    }
-                }
-            }
-        }
     }
 }

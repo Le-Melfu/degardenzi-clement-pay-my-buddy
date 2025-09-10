@@ -1,7 +1,9 @@
+@use '../../assets/styles/variables' as variables;
+@use '../../assets/styles/mixins' as mixins;
+
 .transfer-form {
-    background: white;
+    background-color: variables.$white-color;
     padding: 2rem;
-    margin-bottom: 2rem;
 
     .form-row {
         display: grid;
@@ -15,21 +17,21 @@
 
             .connection-select {
                 padding: 0.75rem 1rem;
-                border: 2px solid #e9ecef;
-                border-radius: 8px;
+                border: 2px solid variables.$light-border;
+                border-radius: variables.$border-radius;
                 font-size: 1rem;
-                background-color: white;
-                color: #333333;
-                transition: border-color 0.2s ease;
+                background-color: variables.$white-color;
+                color: variables.$light-text;
+                transition: border-color variables.$transition-duration ease;
 
                 &:focus {
                     outline: none;
-                    border-color: #007bff;
-                    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+                    border-color: variables.$primary-color;
+                    box-shadow: 0 0 0 3px rgba(32, 127, 238, 0.1);
                 }
 
                 &:hover {
-                    border-color: #ced4da;
+                    border-color: variables.$primary-color;
                 }
             }
 

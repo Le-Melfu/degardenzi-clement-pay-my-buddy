@@ -8,6 +8,7 @@ import { useSession } from '../../hooks/useSession'
 import { api } from '../../services/api'
 import { User, Transaction } from '../../models'
 import './TransferPage.scss'
+import CircularProgressIndicator from '../../components/atoms/CircularProgressIndicator'
 
 const TransferPage: React.FC = () => {
     const { user } = useSession()
@@ -18,6 +19,7 @@ const TransferPage: React.FC = () => {
     const [description, setDescription] = useState('')
     const [amount, setAmount] = useState(0) // Toujours en centimes
     const [transactions, setTransactions] = useState<Transaction[]>([])
+    const [transactionLoading, setTransactionLoading] = useState(false)
     const [snackbar, setSnackbar] = useState<{
         isVisible: boolean
         message: string
@@ -70,6 +72,7 @@ const TransferPage: React.FC = () => {
 
     const loadTransactions = async () => {
         try {
+            setTransactionLoading(true)
             const transactionsData = await api.getTransactions()
             setTransactions(transactionsData || [])
         } catch (error) {
@@ -77,6 +80,8 @@ const TransferPage: React.FC = () => {
                 '[DebugClem] - Erreur lors du chargement des transactions:',
                 error
             )
+        } finally {
+            setTransactionLoading(false)
         }
     }
 
@@ -130,10 +135,14 @@ const TransferPage: React.FC = () => {
                     onTransfer={handleTransfer}
                     isLoading={transactionProcessing}
                 />
-                <TransactionHistory
-                    transactions={transactions}
-                    currentUser={user}
-                />
+                {transactionLoading ? (
+                    <CircularProgressIndicator size="large" />
+                ) : (
+                    <TransactionHistory
+                        transactions={transactions}
+                        currentUser={user}
+                    />
+                )}
             </div>
 
             <Snackbar

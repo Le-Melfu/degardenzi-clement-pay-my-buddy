@@ -1,25 +1,32 @@
-.transactions-section {
-    margin-top: 2rem;
+@use '../../assets/styles/variables' as variables;
+@use '../../assets/styles/mixins' as mixins;
 
+.transactions-section {
     h2 {
-        color: #333333;
+        color: variables.$light-text;
         margin-bottom: 1.5rem;
         font-size: 1.5rem;
         font-weight: 600;
+        flex-shrink: 0; // Empêche le titre de rétrécir
     }
 
     .transactions-table {
-        background: white;
+        background-color: variables.$white-color;
         overflow: hidden;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0; // Important pour que flex fonctionne correctement
 
         .table-header {
             display: grid;
             grid-template-columns: 1fr 2fr 1fr;
+            flex-shrink: 0; // Empêche l'en-tête de rétrécir
 
             .header-cell {
                 padding: 1rem 1.5rem;
                 font-weight: 600;
-                color: #495057;
+                color: variables.$light-text;
                 font-size: 0.9rem;
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
@@ -27,12 +34,15 @@
         }
 
         .table-body {
+            flex: 1;
+            overflow-y: auto;
+            min-height: 0; // Important pour que le scroll fonctionne
+
             .no-transactions {
                 padding: 3rem 1.5rem;
                 text-align: center;
-                color: #6c757d;
+                color: variables.$light-text;
                 font-style: italic;
-                background-color: #f8f9fa;
             }
         }
     }
