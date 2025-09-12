@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import MainButton from '../../components/atoms/MainButton'
 import NavBar from '../../components/molecules/NavBar'
 import { useSession } from '../../hooks/useSession'
@@ -6,7 +6,12 @@ import './ProfilePage.scss'
 import CircularProgressIndicator from '../../components/atoms/CircularProgressIndicator'
 
 const ProfilePage: React.FC = () => {
-    const { user, isLoading } = useSession()
+    const { user, isLoading, forceRefreshUser } = useSession()
+
+    useEffect(() => {
+        // Forcer le refresh de l'utilisateur au montage de la page
+        forceRefreshUser()
+    }, [forceRefreshUser])
 
     const handleModify = () => {
         // TODO: Implémenter la modification du profil

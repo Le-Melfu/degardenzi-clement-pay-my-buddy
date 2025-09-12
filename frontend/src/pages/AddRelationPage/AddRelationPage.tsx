@@ -46,7 +46,6 @@ const AddRelationPage: React.FC = () => {
             } else {
                 setEmailError(false)
             }
-            console.log("Erreur lors de l'ajout de relation:", error)
             showSnackbar("Erreur lors de l'ajout de relation ", false)
             setEmail('')
         }

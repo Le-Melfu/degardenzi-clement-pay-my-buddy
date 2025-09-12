@@ -19,7 +19,7 @@ import com.paymybuddy.services.interfaces.TransactionService;
 import io.micrometer.common.lang.NonNull;
 
 import com.paymybuddy.models.dtos.CreateTransactionRequestDTO;
-import org.springframework.transaction.annotation.Transactional;
+// import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
@@ -36,6 +36,8 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    // TODO: Put transactional back in
+    // @Transactional
     public Transaction createTransaction(User sender, CreateTransactionRequestDTO transactionRequest) {
         Transaction savedTransaction = null;
 
@@ -65,7 +67,6 @@ public class TransactionServiceImpl implements TransactionService {
 
             // Balance check
             if (sender.getBalanceInCents() < transactionRequest.getAmountInCents()) {
-                // this message is sent to the client
                 throw new InsufficientBalanceException("Solde insuffisant");
             }
             loggingService.info("Balance check passed. Sender balance: " + sender.getBalanceInCents() + " cents");

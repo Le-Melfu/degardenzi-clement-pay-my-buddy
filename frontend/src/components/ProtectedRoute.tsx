@@ -7,8 +7,13 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-    const { isAuthenticated, isLoading } = useSession()
+    const { isAuthenticated, isLoading, forceRefreshUser } = useSession()
     const navigate = useNavigate()
+
+    useEffect(() => {
+        // Forcer le refresh de l'utilisateur au montage
+        forceRefreshUser()
+    }, [forceRefreshUser])
 
     useEffect(() => {
         if (!isLoading && !isAuthenticated) {

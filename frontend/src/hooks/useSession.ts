@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { User } from '../models'
 import { sessionService } from '../services/sessionService'
-import { localStorageService } from '../services/localStorageService'
 
 interface UseSessionReturn {
     user: User | null
@@ -10,6 +9,8 @@ interface UseSessionReturn {
     isAuthenticated: boolean
     logout: () => Promise<void>
     refreshUser: () => User | null
+    updateUser: (user: User) => void
+    forceRefreshUser: () => User | null
 }
 
 export const useSession = (): UseSessionReturn => {
@@ -29,6 +30,18 @@ export const useSession = (): UseSessionReturn => {
         }
     }, [])
 
+    // Méthode pour mettre à jour l'utilisateur après login
+    const updateUser = useCallback((user: User) => {
+        setUser(user)
+    }, [])
+
+    // Méthode pour forcer le refresh de l'utilisateur depuis le sessionService
+    const forceRefreshUser = useCallback(() => {
+        const currentUser = sessionService.getCurrentUser()
+        setUser(currentUser)
+        return currentUser
+    }, [])
+
     const logout = useCallback(async () => {
         setIsLoading(true)
         try {
@@ -38,7 +51,6 @@ export const useSession = (): UseSessionReturn => {
         } finally {
             // Nettoyer complètement la session
             sessionService.clearSession()
-            localStorageService.clearUser()
             setUser(null)
             setIsLoading(false)
             navigate('/login')
@@ -46,20 +58,24 @@ export const useSession = (): UseSessionReturn => {
     }, [navigate])
 
     const handleSessionExpired = useCallback(() => {
-        console.log('Session expirée')
         setUser(null)
     }, [])
 
     useEffect(() => {
-        const initializeSession = () => {
+        const initializeSession = async () => {
             setIsLoading(true)
-            const currentUser = refreshUser()
-            setIsLoading(false)
 
-            if (currentUser) {
+            // Récupérer l'utilisateur depuis le sessionService (même sans cookie)
+            const currentUser = sessionService.getCurrentUser()
+            setUser(currentUser)
+
+            // Vérifier si l'utilisateur est authentifié via les cookies
+            if (sessionService.isAuthenticated()) {
                 // Démarrer la surveillance de session
                 sessionService.startSessionMonitoring(handleSessionExpired)
             }
+
+            setIsLoading(false)
         }
 
         // Ne pas initialiser la session sur la page de login
@@ -73,7 +89,7 @@ export const useSession = (): UseSessionReturn => {
         return () => {
             sessionService.stopSessionMonitoring()
         }
-    }, [refreshUser, handleSessionExpired])
+    }, [handleSessionExpired])
 
     return {
         user,
@@ -81,5 +97,7 @@ export const useSession = (): UseSessionReturn => {
         isAuthenticated: user !== null,
         logout,
         refreshUser,
+        updateUser,
+        forceRefreshUser,
     }
 }

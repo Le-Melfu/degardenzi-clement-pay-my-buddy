@@ -13,11 +13,6 @@ import CircularProgressIndicator from '../../components/atoms/CircularProgressIn
 const TransferPage: React.FC = () => {
     const { user } = useSession()
     const [connections, setConnections] = useState<User[]>([])
-    const [selectedConnection, setSelectedConnection] = useState<User | null>(
-        null
-    )
-    const [description, setDescription] = useState('')
-    const [amount, setAmount] = useState(0) // Toujours en centimes
     const [transactions, setTransactions] = useState<Transaction[]>([])
     const [transactionLoading, setTransactionLoading] = useState(false)
     const [snackbar, setSnackbar] = useState<{
@@ -63,7 +58,7 @@ const TransferPage: React.FC = () => {
             const connectionsData = await api.getConnections()
             setConnections(connectionsData || [])
         } catch (error) {
-            console.log('Erreur lors du chargement des connexions:', error)
+            console.error(error)
         }
     }
 
@@ -73,25 +68,24 @@ const TransferPage: React.FC = () => {
             const transactionsData = await api.getTransactions()
             setTransactions(transactionsData || [])
         } catch (error) {
-            console.log('Erreur lors du chargement des transactions:', error)
+            console.error(error)
         } finally {
             setTransactionLoading(false)
         }
     }
 
-    const handleTransfer = async () => {
-        if (!selectedConnection || !amount) {
-            showSnackbar('Veuillez remplir tous les champs', false)
-            return
-        }
-
+    const handleTransfer = async (data: {
+        connection: User
+        description: string
+        amount: number
+    }) => {
         try {
             setTransactionProcessing(true)
             await api
                 .createTransaction({
-                    receiverId: selectedConnection.id,
-                    description: description,
-                    amountInCents: amount,
+                    receiverId: data.connection.id,
+                    description: data.description,
+                    amountInCents: data.amount,
                 })
                 .then((result) => {
                     if (result) {
@@ -103,9 +97,6 @@ const TransferPage: React.FC = () => {
         } catch (error) {
             showSnackbar(error.message, false)
         } finally {
-            setDescription('')
-            setAmount(0)
-            setSelectedConnection(null)
             loadTransactions()
             loadBalance()
             setTransactionProcessing(false)
@@ -120,12 +111,6 @@ const TransferPage: React.FC = () => {
             <div className="transfer-content">
                 <TransferForm
                     connections={connections}
-                    selectedConnection={selectedConnection}
-                    onConnectionChange={setSelectedConnection}
-                    description={description}
-                    onDescriptionChange={setDescription}
-                    amount={amount}
-                    onAmountChange={setAmount}
                     onTransfer={handleTransfer}
                     isLoading={transactionProcessing}
                 />

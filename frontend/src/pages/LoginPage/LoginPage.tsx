@@ -4,6 +4,7 @@ import Form from '../../components/molecules/Form'
 import InputField from '../../components/atoms/InputField'
 import { api } from '../../services/api'
 import { sessionService } from '../../services/sessionService'
+import { useSession } from '../../hooks/useSession'
 import { User } from '../../models'
 import './LoginPage.scss'
 import Snackbar from '../../components/atoms/Snackbar'
@@ -14,6 +15,7 @@ const LoginPage: React.FC = () => {
     const [error, setError] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
+    const { updateUser } = useSession()
     const [snackbar, setSnackbar] = useState<{
         isVisible: boolean
         message: string
@@ -46,10 +48,8 @@ const LoginPage: React.FC = () => {
                 email,
                 password,
             })
-            // Sauvegarder l'utilisateur en local
             sessionService.saveUser(user)
-
-            // Rediriger vers la page user après connexion
+            updateUser(user)
             showSnackbar('Connexion réussie', true)
             navigate('/profile')
         } catch (error) {

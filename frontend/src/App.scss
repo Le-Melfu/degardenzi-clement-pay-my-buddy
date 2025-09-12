@@ -106,11 +106,6 @@ button {
     &:hover {
         border-color: variables.$primary-color;
     }
-
-    &:focus,
-    &:focus-visible {
-        outline: 4px auto -webkit-focus-ring-color;
-    }
 }
 
 // Global form elements

@@ -1,44 +1,26 @@
 import { User } from '../models'
 import { api } from './api'
-import { localStorageService } from './localStorageService'
 
 class SessionService {
     private sessionCheckInterval: number | null = null
-    private readonly SESSION_CHECK_INTERVAL = 5 * 60 * 1000 // 5 minutes
-    private readonly SESSION_WARNING_TIME = 10 * 60 * 1000 // 10 minutes avant expiration
+    private readonly SESSION_CHECK_INTERVAL = 2 * 60 * 1000 // 2 minutes
+    private currentUser: User | null = null
 
-    // Vérifier si l'utilisateur est connecté
     isAuthenticated(): boolean {
-        const user = localStorageService.getUser()
-        if (!user) {
-            return false
-        }
-
-        // Vérifier si la session est encore valide
-        return localStorageService.isSessionValid(30) // 30 minutes
+        return this.hasValidSessionCookie()
     }
 
-    // Obtenir l'utilisateur actuel
+    private hasValidSessionCookie(): boolean {
+        return document.cookie
+            .split(';')
+            .some((cookie) => cookie.trim().startsWith('JSESSIONID='))
+    }
+
     getCurrentUser(): User | null {
-        const user = localStorageService.getUser()
-        if (!user) {
-            return null
-        }
-
-        // Vérifier si la session est encore valide
-        if (!localStorageService.isSessionValid(30)) {
-            this.clearSession()
-            return null
-        }
-
-        return user
+        return this.currentUser
     }
 
-    // Démarrer la surveillance de session
-    startSessionMonitoring(
-        onSessionExpired: () => void,
-        onSessionWarning?: () => void
-    ): void {
+    startSessionMonitoring(onSessionExpired: () => void): void {
         if (this.sessionCheckInterval) {
             clearInterval(this.sessionCheckInterval)
         }
@@ -47,12 +29,12 @@ class SessionService {
             const isAuth = this.isAuthenticated()
             if (!isAuth) {
                 this.stopSessionMonitoring()
+                this.currentUser = null
                 onSessionExpired()
             }
         }, this.SESSION_CHECK_INTERVAL)
     }
 
-    // Arrêter la surveillance de session
     stopSessionMonitoring(): void {
         if (this.sessionCheckInterval) {
             clearInterval(this.sessionCheckInterval)
@@ -60,18 +42,15 @@ class SessionService {
         }
     }
 
-    // Sauvegarder l'utilisateur après connexion
     saveUser(user: User): void {
-        localStorageService.saveUser(user)
+        this.currentUser = user
     }
 
-    // Nettoyer la session locale
     clearSession(): void {
-        localStorageService.clearUser()
+        this.currentUser = null
         this.stopSessionMonitoring()
     }
 
-    // Déconnexion propre
     async logout(): Promise<void> {
         try {
             await api.logout()
@@ -82,9 +61,19 @@ class SessionService {
         }
     }
 
-    // Vérifier la validité de la session avant une action importante
     validateSession(): boolean {
         return this.isAuthenticated()
+    }
+
+    async checkSessionWithServer(): Promise<boolean> {
+        try {
+            await api.getBalance()
+            return true
+        } catch (error) {
+            console.error('Erreur lors de la vérification de session:', error)
+            this.currentUser = null
+            return false
+        }
     }
 }
 

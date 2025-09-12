@@ -6,27 +6,23 @@ import './TransferForm.scss'
 
 interface TransferFormProps {
     connections: User[]
-    selectedConnection: User | null
-    onConnectionChange: (connection: User | null) => void
-    description: string
-    onDescriptionChange: (description: string) => void
-    amount: number
-    onAmountChange: (amount: number) => void
-    onTransfer: () => void
+    onTransfer: (data: {
+        connection: User
+        description: string
+        amount: number
+    }) => void
     isLoading: boolean
 }
 
 const TransferForm: React.FC<TransferFormProps> = ({
     connections,
-    selectedConnection,
-    onConnectionChange,
-    description,
-    onDescriptionChange,
-    amount,
-    onAmountChange,
     onTransfer,
     isLoading,
 }) => {
+    const [selectedConnection, setSelectedConnection] = useState<User | null>(
+        null
+    )
+    const [description, setDescription] = useState('')
     const [amountInputValue, setAmountInputValue] = useState('')
 
     const amountToText = (amountInCents: number) => {
@@ -35,16 +31,28 @@ const TransferForm: React.FC<TransferFormProps> = ({
 
     const handleAmountChange = (value: string) => {
         setAmountInputValue(value)
-        const numericValue = parseFloat(value)
-        if (!isNaN(numericValue)) {
-            onAmountChange(Math.round(numericValue * 100))
-        } else {
-            onAmountChange(0)
-        }
+    }
+
+    const getAmountInCents = () => {
+        const numericValue = parseFloat(amountInputValue)
+        return !isNaN(numericValue) ? Math.round(numericValue * 100) : 0
     }
 
     const handleTransfer = () => {
-        onTransfer()
+        if (!selectedConnection) return
+
+        const amount = getAmountInCents()
+        if (amount <= 0) return
+
+        onTransfer({
+            connection: selectedConnection,
+            description,
+            amount,
+        })
+
+        // Reset form
+        setSelectedConnection(null)
+        setDescription('')
         setAmountInputValue('')
     }
 
@@ -62,7 +70,7 @@ const TransferForm: React.FC<TransferFormProps> = ({
                             const conn = connections.find(
                                 (c) => c.id === connId
                             )
-                            onConnectionChange(conn || null)
+                            setSelectedConnection(conn || null)
                         }}
                         className="connection-select"
                     >
@@ -82,7 +90,7 @@ const TransferForm: React.FC<TransferFormProps> = ({
                         placeholder="Description du transfert"
                         maxLength={255}
                         value={description}
-                        onChange={onDescriptionChange}
+                        onChange={setDescription}
                     />
                 </div>
 
@@ -101,7 +109,11 @@ const TransferForm: React.FC<TransferFormProps> = ({
                     <MainButton
                         variant="primary"
                         onClick={handleTransfer}
-                        disabled={!selectedConnection || !amount || isLoading}
+                        disabled={
+                            !selectedConnection ||
+                            !getAmountInCents() ||
+                            isLoading
+                        }
                         isLoading={isLoading}
                     >
                         Payer

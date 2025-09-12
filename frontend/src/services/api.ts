@@ -36,7 +36,7 @@ async function apiRequest<T>(
             ...defaultHeaders,
             ...options.headers,
         },
-        credentials: 'include', // Inclure les cookies de session
+        credentials: 'include',
     }
 
     try {
@@ -56,7 +56,6 @@ async function apiRequest<T>(
             throw new Error(response.statusText)
         }
 
-        // Vérifier si la réponse a du contenu avant de parser le JSON
         const contentType = response.headers.get('content-type')
         if (contentType && contentType.includes('application/json')) {
             const text = await response.text()

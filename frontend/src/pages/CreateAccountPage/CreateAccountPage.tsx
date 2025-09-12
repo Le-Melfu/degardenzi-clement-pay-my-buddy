@@ -55,11 +55,11 @@ const CreateAccountPage: React.FC = () => {
             showSnackbar('Compte créé avec succès', true)
             setTimeout(() => {
                 navigate('/login')
+                setIsLoading(false)
             }, 1500)
         } catch (error) {
             showSnackbar('Erreur lors de la création du compte', false)
         } finally {
-            setIsLoading(false)
         }
     }
 
@@ -68,8 +68,9 @@ const CreateAccountPage: React.FC = () => {
             <div className="create-account-container">
                 <Form
                     title="Pay My Buddy"
-                    submitButtonText={isLoading ? 'Création...' : "S'inscrire"}
+                    submitButtonText="S'inscrire"
                     onSubmit={handleSubmit}
+                    isLoading={isLoading}
                 >
                     <InputField
                         label="Username"
