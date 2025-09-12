@@ -16,13 +16,19 @@
             flex-direction: column;
 
             .connection-select {
-                padding: 0.75rem 1rem;
+                padding: 0.75rem 2.5rem 0.75rem 1rem;
                 border: 2px solid variables.$light-border;
                 border-radius: variables.$border-radius;
                 font-size: 1rem;
                 background-color: variables.$white-color;
                 color: variables.$light-text;
                 transition: border-color variables.$transition-duration ease;
+                appearance: none;
+                background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a8a8a8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+                background-repeat: no-repeat;
+                background-position: right 0.75rem center;
+                background-size: 1rem;
+                cursor: pointer;
 
                 &:focus {
                     outline: none;
@@ -32,6 +38,11 @@
 
                 &:hover {
                     border-color: variables.$primary-color;
+                }
+
+                // Pour les navigateurs qui ne supportent pas appearance: none
+                &::-ms-expand {
+                    display: none;
                 }
             }
 

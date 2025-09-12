@@ -63,10 +63,7 @@ const TransferPage: React.FC = () => {
             const connectionsData = await api.getConnections()
             setConnections(connectionsData || [])
         } catch (error) {
-            console.log(
-                '[DebugClem] - Erreur lors du chargement des connexions:',
-                error
-            )
+            console.log('Erreur lors du chargement des connexions:', error)
         }
     }
 
@@ -76,10 +73,7 @@ const TransferPage: React.FC = () => {
             const transactionsData = await api.getTransactions()
             setTransactions(transactionsData || [])
         } catch (error) {
-            console.log(
-                '[DebugClem] - Erreur lors du chargement des transactions:',
-                error
-            )
+            console.log('Erreur lors du chargement des transactions:', error)
         } finally {
             setTransactionLoading(false)
         }

@@ -18,3 +18,70 @@
     cursor: pointer;
     transition: border-color variables.$transition-duration;
 }
+
+// Grid layout pour les tableaux (TransactionHistory et TransactionItem)
+@mixin table-grid {
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr;
+}
+
+// Responsive grid pour mobile
+@mixin table-grid-mobile {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    padding: 1rem;
+    border: 1px solid variables.$light-border;
+    border-radius: variables.$border-radius;
+    margin-bottom: 0.5rem;
+}
+
+// Styles communs pour les cellules de tableau
+@mixin table-cell {
+    word-wrap: break-word;
+    overflow: hidden;
+    overflow-wrap: break-word;
+    white-space: normal;
+    width: 100%;
+    padding: 1rem 1.5rem;
+    color: variables.$text-dark;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+}
+
+// Styles pour les barres de défilement personnalisées
+@mixin custom-scrollbar(
+    $width: 8px,
+    $track-color: variables.$light-border,
+    $thumb-color: variables.$primary-color
+) {
+    &::-webkit-scrollbar {
+        width: $width;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: $track-color;
+        border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: $thumb-color;
+        border-radius: 4px;
+
+        &:hover {
+            background: darken($thumb-color, 10%);
+        }
+    }
+}
+
+// Styles communs pour les formulaires
+@mixin form-base {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+// Styles pour les champs de formulaire
+@mixin form-field {
+    display: flex;
+    flex-direction: column;
+}

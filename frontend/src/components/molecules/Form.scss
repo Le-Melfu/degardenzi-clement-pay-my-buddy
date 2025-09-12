@@ -1,9 +1,8 @@
 @use '../../assets/styles/variables' as variables;
+@use '../../assets/styles/mixins' as mixins;
 
 .form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+    @include mixins.form-base;
     padding: 4rem;
     background-color: variables.$light-bg;
     border: 1px solid variables.$black-color;
@@ -28,15 +27,11 @@
     }
 
     &__content {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
+        @include mixins.form-base;
     }
 
     &__fields {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
+        @include mixins.form-base;
     }
 
     &__actions {

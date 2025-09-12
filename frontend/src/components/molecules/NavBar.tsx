@@ -16,37 +16,41 @@ const NavBar: React.FC<NavBarProps> = ({ activePage = '' }) => {
         navigate('/')
     }
 
+    const handleNavigation = (path: string) => {
+        navigate(path)
+    }
+
     return (
         <div className="navbar">
             <div className="navbar-logo">Pay My Buddy</div>
             <nav className="navbar-links">
-                <a
-                    href="/transfer"
+                <button
+                    onClick={() => handleNavigation('/transfer')}
                     className={`navbar-link ${
                         activePage === 'transfer' ? 'active' : ''
                     }`}
                 >
                     Transférer
-                </a>
-                <a
-                    href="/profile"
+                </button>
+                <button
+                    onClick={() => handleNavigation('/profile')}
                     className={`navbar-link ${
                         activePage === 'profile' ? 'active' : ''
                     }`}
                 >
                     Profil
-                </a>
-                <a
-                    href="/add-connection"
+                </button>
+                <button
+                    onClick={() => handleNavigation('/add-connection')}
                     className={`navbar-link ${
                         activePage === 'add-connection' ? 'active' : ''
                     }`}
                 >
                     Ajouter relation
-                </a>
-                <a href="#" className="navbar-link" onClick={handleLogout}>
+                </button>
+                <button className="navbar-link" onClick={handleLogout}>
                     Se déconnecter
-                </a>
+                </button>
             </nav>
         </div>
     )

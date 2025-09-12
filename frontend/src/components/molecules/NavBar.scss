@@ -9,20 +9,23 @@
     margin-bottom: 3rem;
 
     .navbar-logo {
-        font-size: 1.5rem;
+        font-size: 20px;
         font-weight: bold;
         color: #000000;
     }
 
     .navbar-links {
         display: flex;
-        gap: 2rem;
 
         .navbar-link {
+            background: none;
+            border: none;
             text-decoration: none;
             color: #666666;
-            font-size: 1rem;
+            font-size: 20px;
             transition: color 0.2s ease;
+            cursor: pointer;
+            font-family: inherit;
 
             &:hover {
                 color: #000000;

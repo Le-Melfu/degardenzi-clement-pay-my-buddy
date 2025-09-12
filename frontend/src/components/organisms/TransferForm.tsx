@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import MainButton from '../atoms/MainButton'
 import InputField from '../atoms/InputField'
 import { User } from '../../models'
@@ -27,8 +27,25 @@ const TransferForm: React.FC<TransferFormProps> = ({
     onTransfer,
     isLoading,
 }) => {
+    const [amountInputValue, setAmountInputValue] = useState('')
+
     const amountToText = (amountInCents: number) => {
         return amountInCents > 0 ? (amountInCents / 100).toFixed(2) : ''
+    }
+
+    const handleAmountChange = (value: string) => {
+        setAmountInputValue(value)
+        const numericValue = parseFloat(value)
+        if (!isNaN(numericValue)) {
+            onAmountChange(Math.round(numericValue * 100))
+        } else {
+            onAmountChange(0)
+        }
+    }
+
+    const handleTransfer = () => {
+        onTransfer()
+        setAmountInputValue('')
     }
 
     return (
@@ -75,17 +92,15 @@ const TransferForm: React.FC<TransferFormProps> = ({
                         ariaHidden={true}
                         type="number"
                         placeholder="0.00"
-                        value={amountToText(amount)}
-                        onChange={(value) =>
-                            onAmountChange(Math.round(parseFloat(value) * 100))
-                        }
+                        value={amountInputValue}
+                        onChange={handleAmountChange}
                     />
                 </div>
 
                 <div className="form-field">
                     <MainButton
                         variant="primary"
-                        onClick={onTransfer}
+                        onClick={handleTransfer}
                         disabled={!selectedConnection || !amount || isLoading}
                         isLoading={isLoading}
                     >

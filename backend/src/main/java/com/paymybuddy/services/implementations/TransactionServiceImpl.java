@@ -65,6 +65,7 @@ public class TransactionServiceImpl implements TransactionService {
 
             // Balance check
             if (sender.getBalanceInCents() < transactionRequest.getAmountInCents()) {
+                // this message is sent to the client
                 throw new InsufficientBalanceException("Solde insuffisant");
             }
             loggingService.info("Balance check passed. Sender balance: " + sender.getBalanceInCents() + " cents");
@@ -88,6 +89,7 @@ public class TransactionServiceImpl implements TransactionService {
             // Update transaction to FAILED if it exists
             if (savedTransaction != null) {
                 savedTransaction.setStatus(TransactionStatus.FAILED);
+                // this message is sent to the client
                 savedTransaction.setDescription("Transaction échouée: " + e.getMessage());
                 transactionRepository.save(savedTransaction);
                 loggingService

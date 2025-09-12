@@ -8,6 +8,7 @@ import { api } from '../../services/api'
 
 const AddRelationPage: React.FC = () => {
     const [email, setEmail] = useState('')
+    const [emailError, setEmailError] = useState(false)
     const [snackbar, setSnackbar] = useState<{
         isVisible: boolean
         message: string
@@ -40,15 +41,17 @@ const AddRelationPage: React.FC = () => {
             }
             setEmail('')
         } catch (error) {
-            console.log(
-                "[DebugClem] - Erreur lors de l'ajout de relation:",
-                error
-            )
-            showSnackbar("Erreur lors de l'ajout de relation", false)
+            if (!emailRegex.test(email)) {
+                setEmailError(true)
+            } else {
+                setEmailError(false)
+            }
+            console.log("Erreur lors de l'ajout de relation:", error)
+            showSnackbar("Erreur lors de l'ajout de relation ", false)
             setEmail('')
         }
     }
-
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     const handleEmailChange = (value: string) => {
         setEmail(value)
     }
@@ -58,20 +61,24 @@ const AddRelationPage: React.FC = () => {
             <NavBar activePage="add-connection" />
 
             <div className="add-relation-content">
-                <h1 className="page-title">Chercher une relation</h1>
+                <div className="search-section-container">
+                    <div className="search-section">
+                        <h1 className="page-title">Chercher une relation</h1>
 
-                <div className="search-section">
-                    <InputField
-                        label="Adresse mail"
-                        type="email"
-                        placeholder="Saisir une adresse mail"
-                        value={email}
-                        onChange={handleEmailChange}
-                    />
+                        <InputField
+                            label="Adresse mail"
+                            type="email"
+                            placeholder="Saisir une adresse mail"
+                            value={email}
+                            onChange={handleEmailChange}
+                            error={emailError ? 'Adresse mail invalide' : ''}
+                        />
+                    </div>
                     <MainButton
                         variant="primary"
                         onClick={handleAddRelation}
                         disabled={!email.trim()}
+                        className="add-relation-button"
                     >
                         Ajouter
                     </MainButton>

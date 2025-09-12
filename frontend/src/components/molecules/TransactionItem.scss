@@ -1,9 +1,9 @@
 @use '../../assets/styles/variables' as variables;
+@use '../../assets/styles/mixins' as mixins;
 
 .table-row {
-    display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
-    border-bottom: 1px solid #f0f0f0;
+    @include mixins.table-grid;
+    border-bottom: 1px solid variables.$border-light;
     transition: background-color 0.2s ease;
 
     &:hover {
@@ -15,15 +15,7 @@
     }
 
     .table-cell {
-        word-wrap: break-word;
-        overflow: hidden;
-        overflow-wrap: break-word;
-        white-space: normal;
-        width: 100%;
-        padding: 1rem 1.5rem;
-        color: #333333;
-        font-size: 0.95rem;
-        box-sizing: border-box;
+        @include mixins.table-cell;
 
         &:first-child {
             font-weight: 500;
@@ -58,12 +50,7 @@
 // Responsive design
 @media (max-width: 768px) {
     .table-row {
-        grid-template-columns: 1fr;
-        gap: 0.5rem;
-        padding: 1rem;
-        border: 1px solid #e0e0e0;
-        border-radius: 8px;
-        margin-bottom: 0.5rem;
+        @include mixins.table-grid-mobile;
 
         .table-cell {
             padding: 0.25rem 0;

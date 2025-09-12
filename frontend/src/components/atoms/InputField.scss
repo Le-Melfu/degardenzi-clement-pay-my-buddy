@@ -27,12 +27,18 @@
 
         transition: border-color variables.$transition-duration;
         background-color: #fff;
-        color: #333;
+        color: variables.$text-dark;
 
         &:focus {
             outline: none;
             border-color: variables.$primary-color;
             box-shadow: 0 0 0 2px rgba(100, 108, 255, 0.2);
+        }
+
+        &::placeholder {
+            color: variables.$text-muted;
+            font-family: variables.$font-family;
+            font-weight: 400;
         }
 
         &--error {

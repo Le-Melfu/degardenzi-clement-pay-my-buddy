@@ -1,37 +1,58 @@
+@use '../../assets/styles/variables' as variables;
+
 .add-relation-page {
+    display: flex;
+    flex-direction: column;
     min-height: 100vh;
     background-color: #ffffff;
     padding: 2rem;
 
     .add-relation-content {
+        display: flex;
+        flex-direction: row;
+        height: 100%;
         max-width: 600px;
+        align-content: center;
         margin: 0 auto;
         text-align: center;
 
+        .search-section-container {
+            align-self: center;
+            display: flex;
+            flex-direction: row;
+            height: min-content;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
         .page-title {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: #333333;
-            margin-bottom: 2rem;
+            text-align: start;
+            font-size: 20px;
+            font-weight: 500;
+            color: variables.$text-dark;
         }
 
         .search-section {
             display: flex;
+            flex-direction: column;
             gap: 1rem;
-            align-items: end;
+            align-items: start;
             justify-content: center;
             flex-wrap: wrap;
 
             .text-field {
+                color: variables.$text-muted;
                 flex: 1;
-                min-width: 300px;
-                max-width: 400px;
+                min-width: 480px;
             }
-
-            .main-button {
-                flex-shrink: 0;
-                min-width: 120px;
-            }
+        }
+        .add-relation-button {
+            background-color: variables.$secondary-color;
+            padding: 0 2rem;
+            width: 150px;
+            height: 62px;
+            max-height: 62px;
         }
     }
 }

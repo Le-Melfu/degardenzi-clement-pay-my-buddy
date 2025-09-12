@@ -2,12 +2,16 @@
 @use '../../assets/styles/mixins' as mixins;
 
 .transactions-section {
+    border: 1px solid variables.$light-border;
+    border-radius: variables.$border-radius;
+    padding: 2rem;
+
     h2 {
         color: variables.$light-text;
-        margin-bottom: 1.5rem;
-        font-size: 1.5rem;
+        margin-left: 1rem;
+        font-size: 24px;
         font-weight: 600;
-        flex-shrink: 0; // Empêche le titre de rétrécir
+        flex-shrink: 0;
     }
 
     .transactions-table {
@@ -16,27 +20,26 @@
         flex: 1;
         display: flex;
         flex-direction: column;
-        min-height: 0; // Important pour que flex fonctionne correctement
+        min-height: 0;
 
         .table-header {
-            display: grid;
-            grid-template-columns: 1fr 2fr 1fr;
-            flex-shrink: 0; // Empêche l'en-tête de rétrécir
+            @include mixins.table-grid;
+            flex-shrink: 0;
 
             .header-cell {
-                padding: 1rem 1.5rem;
+                margin-left: 1rem;
                 font-weight: 600;
                 color: variables.$light-text;
-                font-size: 0.9rem;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
+                font-size: 24px;
             }
         }
 
         .table-body {
             flex: 1;
             overflow-y: auto;
-            min-height: 0; // Important pour que le scroll fonctionne
+            min-height: 0;
+
+            @include mixins.custom-scrollbar;
 
             .no-transactions {
                 padding: 3rem 1.5rem;

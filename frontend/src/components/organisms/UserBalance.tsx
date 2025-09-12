@@ -14,20 +14,32 @@ const UserBalance: React.FC<UserBalanceProps> = ({
     onBalanceUpdate,
 }) => {
     const [addFundsAmount, setAddFundsAmount] = useState(0)
+    const [inputValue, setInputValue] = useState('')
 
     const amountToText = (amountInCents: number) => {
-        return amountInCents > 0 ? (amountInCents / 100).toFixed(2) : ''
+        return (amountInCents / 100).toFixed(2)
     }
 
     const formatAmount = (amountInCents: number) => {
-        return `${amountToText(amountInCents)}€`
+        return `${amountToText(amountInCents)} €`
     }
 
     const handleAddFunds = () => {
         api.addMoney(addFundsAmount).then(() => {
             onBalanceUpdate()
             setAddFundsAmount(0)
+            setInputValue('')
         })
+    }
+
+    const handleInputChange = (value: string) => {
+        setInputValue(value)
+        const numericValue = parseFloat(value)
+        if (!isNaN(numericValue)) {
+            setAddFundsAmount(Math.round(numericValue * 100))
+        } else {
+            setAddFundsAmount(0)
+        }
     }
 
     return (
@@ -42,12 +54,8 @@ const UserBalance: React.FC<UserBalanceProps> = ({
                         label="Montant à ajouter"
                         type="number"
                         placeholder="0.00"
-                        value={amountToText(addFundsAmount)}
-                        onChange={(value) =>
-                            setAddFundsAmount(
-                                Math.round(parseFloat(value) * 100)
-                            )
-                        }
+                        value={inputValue}
+                        onChange={handleInputChange}
                     />
                     <MainButton
                         variant="secondary"
