@@ -6,12 +6,13 @@
     margin: 0 auto;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 3rem;
+    margin: 8px 0;
 
     .navbar-logo {
         font-size: 20px;
         font-weight: bold;
         color: #000000;
+        background: none;
     }
 
     .navbar-links {

@@ -118,6 +118,24 @@ public class UserController {
         }
     }
 
+    @GetMapping("/user")
+    @Operation(summary = "Obtenir les informations de l'utilisateur connecté", description = "Obtenir les informations de l'utilisateur connecté")
+    @SecurityRequirement(name = "sessionAuth")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Informations de l'utilisateur obtenues avec succès"),
+            @ApiResponse(responseCode = "401", description = "Utilisateur non authentifié")
+    })
+    public ResponseEntity<PublicUserDTO> getUser(
+            @AuthenticationPrincipal org.springframework.security.core.userdetails.User principal) {
+
+        Optional<User> user = userService.findByEmail(principal.getUsername());
+        if (user.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity
+                .ok(new PublicUserDTO(user.get().getId(), user.get().getUsername(), user.get().getEmail()));
+    }
+
     @PostMapping("/add-money")
     @Operation(summary = "Ajouter de l'argent au compte", description = "Ajouter un montant au solde de l'utilisateur connecté")
     @SecurityRequirement(name = "sessionAuth")

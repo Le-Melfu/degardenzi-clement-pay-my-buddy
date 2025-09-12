@@ -57,8 +57,6 @@ const AddRelationPage: React.FC = () => {
 
     return (
         <div className="add-relation-page">
-            <NavBar activePage="add-connection" />
-
             <div className="add-relation-content">
                 <div className="search-section-container">
                     <div className="search-section">

@@ -14,7 +14,7 @@ const ErrorPage: React.FC = () => {
             <div className="error-content">
                 <div className="error-number">404</div>
                 <h1 className="error-title">Page non trouvée</h1>
-                <p className="error-message">
+                <p className="not-found-message">
                     Désolé, la page que vous recherchez n'existe pas ou a été
                     déplacée.
                 </p>

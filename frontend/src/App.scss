@@ -132,6 +132,12 @@ img {
 }
 
 // Utils
+.app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
 .hidden {
     display: none;
 }

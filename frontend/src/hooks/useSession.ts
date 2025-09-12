@@ -8,9 +8,9 @@ interface UseSessionReturn {
     isLoading: boolean
     isAuthenticated: boolean
     logout: () => Promise<void>
-    refreshUser: () => User | null
+    refreshUser: () => Promise<User | null>
     updateUser: (user: User) => void
-    forceRefreshUser: () => User | null
+    forceRefreshUser: () => Promise<User | null>
 }
 
 export const useSession = (): UseSessionReturn => {
@@ -18,13 +18,12 @@ export const useSession = (): UseSessionReturn => {
     const [isLoading, setIsLoading] = useState(true)
     const navigate = useNavigate()
 
-    const refreshUser = useCallback((): User | null => {
+    const refreshUser = useCallback(async (): Promise<User | null> => {
         try {
-            const currentUser = sessionService.getCurrentUser()
+            const currentUser = await sessionService.getCurrentUser()
             setUser(currentUser)
             return currentUser
         } catch (error) {
-            console.error("Erreur lors du refresh de l'utilisateur:", error)
             setUser(null)
             return null
         }
@@ -36,8 +35,8 @@ export const useSession = (): UseSessionReturn => {
     }, [])
 
     // Méthode pour forcer le refresh de l'utilisateur depuis le sessionService
-    const forceRefreshUser = useCallback(() => {
-        const currentUser = sessionService.getCurrentUser()
+    const forceRefreshUser = useCallback(async () => {
+        const currentUser = await sessionService.getCurrentUser()
         setUser(currentUser)
         return currentUser
     }, [])
@@ -47,7 +46,7 @@ export const useSession = (): UseSessionReturn => {
         try {
             await sessionService.logout()
         } catch (error) {
-            console.error('Erreur lors de la déconnexion:', error)
+            navigate('/login')
         } finally {
             // Nettoyer complètement la session
             sessionService.clearSession()
@@ -57,21 +56,26 @@ export const useSession = (): UseSessionReturn => {
         }
     }, [navigate])
 
-    const handleSessionExpired = useCallback(() => {
+    const handleSessionExpired = useCallback(async () => {
         setUser(null)
+        try {
+            await sessionService.logout()
+        } catch (error) {
+        } finally {
+            navigate('/')
+        }
     }, [])
 
     useEffect(() => {
         const initializeSession = async () => {
             setIsLoading(true)
 
-            // Récupérer l'utilisateur depuis le sessionService (même sans cookie)
-            const currentUser = sessionService.getCurrentUser()
+            // Récupérer l'utilisateur depuis le sessionService
+            const currentUser = await sessionService.getCurrentUser()
             setUser(currentUser)
 
-            // Vérifier si l'utilisateur est authentifié via les cookies
-            if (sessionService.isAuthenticated()) {
-                // Démarrer la surveillance de session
+            // Démarrer la surveillance de session si on a un utilisateur
+            if (currentUser) {
                 sessionService.startSessionMonitoring(handleSessionExpired)
             }
 

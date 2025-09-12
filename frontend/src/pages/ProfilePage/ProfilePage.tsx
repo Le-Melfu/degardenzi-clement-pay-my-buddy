@@ -20,8 +20,6 @@ const ProfilePage: React.FC = () => {
 
     return (
         <div className="profile-page">
-            <NavBar activePage="profile" />
-
             <div className="profile-container">
                 <div className="profile-content">
                     {user ? (

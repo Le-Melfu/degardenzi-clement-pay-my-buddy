@@ -6,15 +6,8 @@ const SESSION_TIMESTAMP_KEY = 'paymybuddy_session_timestamp'
 class LocalStorageService {
     // Sauvegarder l'utilisateur en local
     saveUser(user: User): void {
-        try {
-            localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user))
-            localStorage.setItem(SESSION_TIMESTAMP_KEY, Date.now().toString())
-        } catch (error) {
-            console.error(
-                "Erreur lors de la sauvegarde de l'utilisateur:",
-                error
-            )
-        }
+        localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user))
+        localStorage.setItem(SESSION_TIMESTAMP_KEY, Date.now().toString())
     }
 
     // Récupérer l'utilisateur depuis le stockage local
@@ -26,10 +19,6 @@ class LocalStorageService {
             }
             return JSON.parse(userData) as User
         } catch (error) {
-            console.error(
-                "Erreur lors de la récupération de l'utilisateur:",
-                error
-            )
             return null
         }
     }
@@ -48,37 +37,22 @@ class LocalStorageService {
 
             return now - sessionTime < maxAge
         } catch (error) {
-            console.error('Erreur lors de la vérification de session:', error)
             return false
         }
     }
 
     // Supprimer l'utilisateur du stockage local
     clearUser(): void {
-        try {
-            localStorage.removeItem(USER_STORAGE_KEY)
-            localStorage.removeItem(SESSION_TIMESTAMP_KEY)
-        } catch (error) {
-            console.error(
-                "Erreur lors de la suppression de l'utilisateur:",
-                error
-            )
-        }
+        localStorage.removeItem(USER_STORAGE_KEY)
+        localStorage.removeItem(SESSION_TIMESTAMP_KEY)
     }
 
     // Mettre à jour les informations de l'utilisateur
     updateUser(updatedUser: Partial<User>): void {
-        try {
-            const currentUser = this.getUser()
-            if (currentUser) {
-                const mergedUser = { ...currentUser, ...updatedUser }
-                this.saveUser(mergedUser)
-            }
-        } catch (error) {
-            console.error(
-                "Erreur lors de la mise à jour de l'utilisateur:",
-                error
-            )
+        const currentUser = this.getUser()
+        if (currentUser) {
+            const mergedUser = { ...currentUser, ...updatedUser }
+            this.saveUser(mergedUser)
         }
     }
 }

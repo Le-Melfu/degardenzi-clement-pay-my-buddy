@@ -4,14 +4,14 @@ import NavBar from '../../components/molecules/NavBar'
 import UserBalance from '../../components/organisms/UserBalance'
 import TransferForm from '../../components/organisms/TransferForm'
 import TransactionHistory from '../../components/organisms/TransactionHistory'
-import { useSession } from '../../hooks/useSession'
+import { useSessionContext } from '../../contexts/SessionContext'
 import { api } from '../../services/api'
 import { User, Transaction } from '../../models'
 import './TransferPage.scss'
 import CircularProgressIndicator from '../../components/atoms/CircularProgressIndicator'
 
 const TransferPage: React.FC = () => {
-    const { user } = useSession()
+    const { user } = useSessionContext()
     const [connections, setConnections] = useState<User[]>([])
     const [transactions, setTransactions] = useState<Transaction[]>([])
     const [transactionLoading, setTransactionLoading] = useState(false)
@@ -53,22 +53,30 @@ const TransferPage: React.FC = () => {
         loadBalance()
     }, [])
 
-    const loadConnections = async () => {
+    const loadConnections = async (tries: number = 0) => {
         try {
             const connectionsData = await api.getConnections()
             setConnections(connectionsData || [])
         } catch (error) {
-            console.error(error)
+            if (tries < 3) {
+                loadConnections(tries + 1)
+            } else {
+                return
+            }
         }
     }
 
-    const loadTransactions = async () => {
+    const loadTransactions = async (tries: number = 0) => {
         try {
             setTransactionLoading(true)
             const transactionsData = await api.getTransactions()
             setTransactions(transactionsData || [])
         } catch (error) {
-            console.error(error)
+            if (tries < 3) {
+                loadTransactions(tries + 1)
+            } else {
+                return
+            }
         } finally {
             setTransactionLoading(false)
         }
@@ -105,7 +113,6 @@ const TransferPage: React.FC = () => {
 
     return (
         <div className="transfer-page">
-            <NavBar activePage="transfer" />
             <UserBalance balance={balance} onBalanceUpdate={loadBalance} />
 
             <div className="transfer-content">

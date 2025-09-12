@@ -1,7 +1,7 @@
 @use '../../assets/styles/variables.scss' as variables;
 
 .error-page {
-    min-height: 100vh;
+    min-height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -33,11 +33,11 @@
     text-shadow: 0 2px 4px rgba(variables.$black-color, 0.3);
 }
 
-.error-message {
+.not-found-message {
     font-size: 1.2rem;
-    margin-bottom: 2rem;
     opacity: 0.9;
     line-height: 1.6;
+    margin-bottom: 2rem;
 }
 
 .home-button {

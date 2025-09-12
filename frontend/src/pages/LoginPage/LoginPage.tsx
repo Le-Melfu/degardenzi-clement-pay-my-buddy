@@ -4,7 +4,7 @@ import Form from '../../components/molecules/Form'
 import InputField from '../../components/atoms/InputField'
 import { api } from '../../services/api'
 import { sessionService } from '../../services/sessionService'
-import { useSession } from '../../hooks/useSession'
+import { useSessionContext } from '../../contexts/SessionContext'
 import { User } from '../../models'
 import './LoginPage.scss'
 import Snackbar from '../../components/atoms/Snackbar'
@@ -15,7 +15,7 @@ const LoginPage: React.FC = () => {
     const [error, setError] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
-    const { updateUser } = useSession()
+    const { updateUser } = useSessionContext()
     const [snackbar, setSnackbar] = useState<{
         isVisible: boolean
         message: string
@@ -54,7 +54,6 @@ const LoginPage: React.FC = () => {
             navigate('/profile')
         } catch (error) {
             showSnackbar('Connexion échouée', false)
-            console.error('Login failed:', error)
             setError('Email ou mot de passe incorrect')
         } finally {
             setIsLoading(false)
@@ -68,8 +67,8 @@ const LoginPage: React.FC = () => {
                 submitButtonText={'Se connecter'}
                 onSubmit={handleSubmit}
                 isLoading={isLoading}
+                className="login-form"
             >
-                {error && <div className="error-message">{error}</div>}
                 <InputField
                     label="Mail"
                     type="email"
@@ -86,6 +85,7 @@ const LoginPage: React.FC = () => {
                     onChange={setPassword}
                     required
                 />
+                {error && <div className="error-message">{error}</div>}
             </Form>
             <Snackbar
                 message={snackbar.message}

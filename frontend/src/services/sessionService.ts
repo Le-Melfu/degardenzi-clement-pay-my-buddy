@@ -16,8 +16,15 @@ class SessionService {
             .some((cookie) => cookie.trim().startsWith('JSESSIONID='))
     }
 
-    getCurrentUser(): User | null {
-        return this.currentUser
+    async getCurrentUser(): Promise<User | null> {
+        try {
+            if (!this.currentUser) {
+                this.currentUser = await api.getUser()
+            }
+            return this.currentUser
+        } catch (error) {
+            return null
+        }
     }
 
     startSessionMonitoring(onSessionExpired: () => void): void {
@@ -25,12 +32,14 @@ class SessionService {
             clearInterval(this.sessionCheckInterval)
         }
 
-        this.sessionCheckInterval = setInterval(() => {
-            const isAuth = this.isAuthenticated()
-            if (!isAuth) {
+        this.sessionCheckInterval = setInterval(async () => {
+            try {
+                await this.checkSessionWithServer()
+            } catch (error) {
                 this.stopSessionMonitoring()
                 this.currentUser = null
                 onSessionExpired()
+                this.clearSession()
             }
         }, this.SESSION_CHECK_INTERVAL)
     }
@@ -55,7 +64,6 @@ class SessionService {
         try {
             await api.logout()
         } catch (error) {
-            console.error('Erreur lors de la déconnexion:', error)
         } finally {
             this.clearSession()
         }
@@ -67,12 +75,11 @@ class SessionService {
 
     async checkSessionWithServer(): Promise<boolean> {
         try {
-            await api.getBalance()
+            await api.getUser()
             return true
         } catch (error) {
-            console.error('Erreur lors de la vérification de session:', error)
             this.currentUser = null
-            return false
+            throw error
         }
     }
 }

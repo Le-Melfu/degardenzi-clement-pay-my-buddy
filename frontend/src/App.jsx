@@ -7,45 +7,55 @@ import TransferPage from './pages/TransferPage/TransferPage'
 import CreateAccountPage from './pages/CreateAccountPage/CreateAccountPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import SessionNotification from './components/molecules/SessionNotification'
+import { SessionProvider } from './contexts/SessionContext'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import ErrorPage from './pages/ErrorPage/ErrorPage'
+import NavBar from './components/molecules/NavBar'
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>
-        <BrowserRouter>
-            <SessionNotification />
-            <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<CreateAccountPage />} />
-                <Route
-                    path="/profile"
-                    element={
-                        <ProtectedRoute>
-                            <ProfilePage />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/add-connection"
-                    element={
-                        <ProtectedRoute>
-                            <AddRelationPage />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/transfer"
-                    element={
-                        <ProtectedRoute>
-                            <TransferPage />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route path="*" element={<ErrorPage />} />
-            </Routes>
-        </BrowserRouter>
+        <div className="app">
+            <BrowserRouter>
+                <SessionProvider>
+                    <SessionNotification />
+                    <NavBar />
+                    <Routes>
+                        <Route path="/" element={<HomePage />} />
+                        <Route path="/login" element={<LoginPage />} />
+                        <Route
+                            path="/register"
+                            element={<CreateAccountPage />}
+                        />
+                        <Route
+                            path="/profile"
+                            element={
+                                <ProtectedRoute>
+                                    <ProfilePage />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/add-connection"
+                            element={
+                                <ProtectedRoute>
+                                    <AddRelationPage />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/transfer"
+                            element={
+                                <ProtectedRoute>
+                                    <TransferPage />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route path="*" element={<ErrorPage />} />
+                    </Routes>
+                </SessionProvider>
+            </BrowserRouter>
+        </div>
     </StrictMode>
 )

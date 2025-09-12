@@ -64,7 +64,6 @@ async function apiRequest<T>(
 
         return null
     } catch (error) {
-        console.error('Erreur API:', error)
         throw error
     }
 }
@@ -90,6 +89,14 @@ export const api = {
         })
         if (!result) {
             throw new Error('Échec de la création de compte')
+        }
+        return result
+    },
+
+    async getUser(): Promise<User> {
+        const result = await apiRequest<User>('/user')
+        if (!result) {
+            throw new Error("Échec de la récupération de l'utilisateur")
         }
         return result
     },
