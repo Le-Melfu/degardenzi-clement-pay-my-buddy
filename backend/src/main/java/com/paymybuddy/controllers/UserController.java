@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -169,5 +170,46 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         return ResponseEntity.ok(user.get().getBalanceInCents());
+    }
+
+    @PutMapping("/user")
+    @Operation(summary = "Mettre à jour les informations de l'utilisateur", description = "Mettre à jour le nom d'utilisateur, l'email et/ou le mot de passe")
+    @SecurityRequirement(name = "sessionAuth")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Utilisateur mis à jour avec succès", content = @Content(schema = @Schema(implementation = PublicUserDTO.class))),
+            @ApiResponse(responseCode = "401", description = "Utilisateur non authentifié"),
+            @ApiResponse(responseCode = "400", description = "Données invalides"),
+            @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
+    })
+    public ResponseEntity<PublicUserDTO> updateUser(@RequestBody @Valid PublicUserDTO userDTO,
+            @AuthenticationPrincipal org.springframework.security.core.userdetails.User principal) {
+        try {
+            Optional<User> currentUser = userService.findByEmail(principal.getUsername());
+            if (currentUser.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
+            // Vérifier si l'email est déjà utilisé par un autre utilisateur
+            if (!currentUser.get().getEmail().equals(userDTO.getEmail())) {
+                Optional<User> existingUser = userService.findByEmail(userDTO.getEmail());
+                if (existingUser.isPresent() && !existingUser.get().getId().equals(currentUser.get().getId())) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+                }
+            }
+
+            PublicUserDTO updatedUser = userService.updateUser(
+                    currentUser.get().getId(),
+                    userDTO.getUsername(),
+                    userDTO.getEmail(),
+                    null // Le mot de passe sera géré séparément si nécessaire
+            );
+
+            loggingService.info("UserController: User updated successfully - ID: " + currentUser.get().getId());
+            return ResponseEntity.ok(updatedUser);
+
+        } catch (Exception e) {
+            loggingService.error("UserController: Update user error - " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

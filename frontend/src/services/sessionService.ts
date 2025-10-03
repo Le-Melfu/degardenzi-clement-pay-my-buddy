@@ -3,7 +3,7 @@ import { api } from './api'
 
 class SessionService {
     private sessionCheckInterval: number | null = null
-    private readonly SESSION_CHECK_INTERVAL = 2 * 60 * 1000 // 2 minutes
+    private readonly SESSION_CHECK_INTERVAL = 5 * 60 * 1000 // 5 minutes
     private currentUser: User | null = null
 
     isAuthenticated(): boolean {
@@ -33,9 +33,8 @@ class SessionService {
         }
 
         this.sessionCheckInterval = setInterval(async () => {
-            try {
-                await this.checkSessionWithServer()
-            } catch (error) {
+            const isSessionValid = await this.checkSessionWithServer()
+            if (!isSessionValid) {
                 this.stopSessionMonitoring()
                 this.currentUser = null
                 onSessionExpired()
@@ -79,7 +78,7 @@ class SessionService {
             return true
         } catch (error) {
             this.currentUser = null
-            throw error
+            return false
         }
     }
 }

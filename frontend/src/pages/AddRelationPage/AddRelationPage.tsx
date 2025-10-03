@@ -1,14 +1,16 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import MainButton from '../../components/atoms/MainButton'
 import InputField from '../../components/atoms/InputField'
 import Snackbar from '../../components/atoms/Snackbar'
 import NavBar from '../../components/molecules/NavBar'
 import './AddRelationPage.scss'
 import { api } from '../../services/api'
+import { User } from '../../models'
 
 const AddRelationPage: React.FC = () => {
     const [email, setEmail] = useState('')
     const [emailError, setEmailError] = useState(false)
+    const [connections, setConnections] = useState<User[]>([])
     const [snackbar, setSnackbar] = useState<{
         isVisible: boolean
         message: string
@@ -31,6 +33,11 @@ const AddRelationPage: React.FC = () => {
         setSnackbar((prev) => ({ ...prev, isVisible: false }))
     }
 
+    const fetchConnections = async () => {
+        const res = await api.getConnections()
+        setConnections(res)
+    }
+
     const handleAddRelation = async () => {
         try {
             const res = await api.addConnection({ connectionEmail: email })
@@ -48,12 +55,18 @@ const AddRelationPage: React.FC = () => {
             }
             showSnackbar("Erreur lors de l'ajout de relation ", false)
             setEmail('')
+        } finally {
+            fetchConnections()
         }
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     const handleEmailChange = (value: string) => {
         setEmail(value)
     }
+
+    useEffect(() => {
+        fetchConnections()
+    }, [])
 
     return (
         <div className="add-relation-page">
@@ -79,6 +92,14 @@ const AddRelationPage: React.FC = () => {
                     >
                         Ajouter
                     </MainButton>
+                </div>
+                <div className="relations-list">
+                    <h1 className="page-title">Liste des relations</h1>
+                    {connections.map((connection) => (
+                        <div className="relation-item">
+                            <p>{connection.email}</p>
+                        </div>
+                    ))}
                 </div>
             </div>
 

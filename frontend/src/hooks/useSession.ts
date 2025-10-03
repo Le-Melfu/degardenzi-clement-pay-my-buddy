@@ -62,9 +62,9 @@ export const useSession = (): UseSessionReturn => {
             await sessionService.logout()
         } catch (error) {
         } finally {
-            navigate('/')
+            navigate('/login')
         }
-    }, [])
+    }, [navigate])
 
     useEffect(() => {
         const initializeSession = async () => {

@@ -47,4 +47,15 @@ public interface UserService {
      * @return the user if found
      */
     Optional<User> findByEmail(String email);
+
+    /**
+     * Update user information
+     * 
+     * @param userId   the user ID to update
+     * @param username the new username
+     * @param email    the new email
+     * @param password the new password (encoded)
+     * @return the updated user as PublicUserDTO
+     */
+    PublicUserDTO updateUser(Integer userId, String username, String email, String password);
 }

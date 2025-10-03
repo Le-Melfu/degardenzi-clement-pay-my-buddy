@@ -64,4 +64,30 @@ public class UserServiceImpl implements UserService {
     public Optional<User> findById(Integer userId) {
         return userRepository.findById(userId);
     }
+
+    // TODO: Test this method
+    @Override
+    public PublicUserDTO updateUser(Integer userId, String username, String email, String password) {
+        try {
+            // Encode new password if provided
+            String encodedPassword = password != null ? passwordEncoder.encode(password) : null;
+
+            // Update user via repository
+            userRepository.updateUser(userId, username, email, encodedPassword);
+
+            // Get updated user
+            Optional<User> updatedUser = userRepository.findById(userId);
+            if (updatedUser.isEmpty()) {
+                throw new RuntimeException("User not found after update");
+            }
+
+            loggingService.info("UserService: User updated successfully - ID: " + userId + ", Username: " + username
+                    + ", Email: " + email);
+            return new PublicUserDTO(updatedUser.get().getId(), updatedUser.get().getUsername(),
+                    updatedUser.get().getEmail());
+        } catch (Exception e) {
+            loggingService.error("UserService: Failed to update user ID: " + userId + " - " + e.getMessage());
+            throw new RuntimeException("Failed to update user", e);
+        }
+    }
 }

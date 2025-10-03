@@ -3,6 +3,7 @@ package com.paymybuddy.repository;
 import com.paymybuddy.models.User;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -29,5 +30,15 @@ public interface UserRepository extends JpaRepository<User, Integer> {
      */
     @Query("SELECT u.password FROM User u WHERE u.email = :email")
     String getPassword(@Param("email") String email);
+
+    /**
+     * Update a user
+     * 
+     * @param user the user to update
+     */
+    @Modifying
+    @Query("UPDATE User u SET u.username = :username, u.email = :email, u.password = :password WHERE u.id = :id")
+    void updateUser(@Param("id") Integer id, @Param("username") String username, @Param("email") String email,
+            @Param("password") String password);
 
 }
