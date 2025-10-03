@@ -4,6 +4,9 @@ import java.util.Optional;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 import com.paymybuddy.models.User;
 import com.paymybuddy.models.dtos.UserCredentialsDTO;
@@ -18,6 +21,9 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final LoggingService loggingService;
     private final PasswordEncoder passwordEncoder;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public UserServiceImpl(UserRepository userRepository, LoggingService loggingService,
             PasswordEncoder passwordEncoder) {
@@ -65,15 +71,29 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(userId);
     }
 
-    // TODO: Test this method
     @Override
-    public PublicUserDTO updateUser(Integer userId, String username, String email, String password) {
+    @Transactional
+    public User updateUser(Integer userId, String username, String email, String password) {
         try {
-            // Encode new password if provided
-            String encodedPassword = password != null ? passwordEncoder.encode(password) : null;
+            // Update username if provided
+            if (username != null && !username.trim().isEmpty()) {
+                userRepository.updateUsername(userId, username.trim());
+            }
 
-            // Update user via repository
-            userRepository.updateUser(userId, username, email, encodedPassword);
+            // Update email if provided
+            if (email != null && !email.trim().isEmpty()) {
+                userRepository.updateEmail(userId, email.trim());
+            }
+
+            // Update password if provided
+            if (password != null && !password.trim().isEmpty()) {
+                String encodedPassword = passwordEncoder.encode(password.trim());
+                userRepository.updatePassword(userId, encodedPassword);
+            }
+
+            // Force flush to ensure all updates are written to database
+            entityManager.flush();
+            entityManager.clear();
 
             // Get updated user
             Optional<User> updatedUser = userRepository.findById(userId);
@@ -81,10 +101,11 @@ public class UserServiceImpl implements UserService {
                 throw new RuntimeException("User not found after update");
             }
 
-            loggingService.info("UserService: User updated successfully - ID: " + userId + ", Username: " + username
-                    + ", Email: " + email);
-            return new PublicUserDTO(updatedUser.get().getId(), updatedUser.get().getUsername(),
-                    updatedUser.get().getEmail());
+            loggingService.info("UserService: User updated successfully - ID: " + userId +
+                    (username != null ? ", Username: " + username : "") +
+                    (email != null ? ", Email: " + email : "") +
+                    (password != null ? ", Password: updated" : ""));
+            return updatedUser.get();
         } catch (Exception e) {
             loggingService.error("UserService: Failed to update user ID: " + userId + " - " + e.getMessage());
             throw new RuntimeException("Failed to update user", e);

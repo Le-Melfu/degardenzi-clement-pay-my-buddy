@@ -52,10 +52,10 @@ public interface UserService {
      * Update user information
      * 
      * @param userId   the user ID to update
-     * @param username the new username
-     * @param email    the new email
-     * @param password the new password (encoded)
-     * @return the updated user as PublicUserDTO
+     * @param username the new username (optional)
+     * @param email    the new email (optional)
+     * @param password the new password (optional)
+     * @return the updated user
      */
-    PublicUserDTO updateUser(Integer userId, String username, String email, String password);
+    User updateUser(Integer userId, String username, String email, String password);
 }

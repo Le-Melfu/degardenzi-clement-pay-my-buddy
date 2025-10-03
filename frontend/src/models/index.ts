@@ -10,3 +10,4 @@ export {
     RegisterRequest,
     fromJson as fromRegisterRequestJson,
 } from './RegisterRequest'
+export { UpdateUserRequest } from './UpdateUserRequest'

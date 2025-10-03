@@ -29,12 +29,11 @@ export const useSession = (): UseSessionReturn => {
         }
     }, [])
 
-    // Méthode pour mettre à jour l'utilisateur après login
     const updateUser = useCallback((user: User) => {
         setUser(user)
+        sessionService.saveUser(user)
     }, [])
 
-    // Méthode pour forcer le refresh de l'utilisateur depuis le sessionService
     const forceRefreshUser = useCallback(async () => {
         const currentUser = await sessionService.getCurrentUser()
         setUser(currentUser)
@@ -48,7 +47,6 @@ export const useSession = (): UseSessionReturn => {
         } catch (error) {
             navigate('/login')
         } finally {
-            // Nettoyer complètement la session
             sessionService.clearSession()
             setUser(null)
             setIsLoading(false)
@@ -70,11 +68,9 @@ export const useSession = (): UseSessionReturn => {
         const initializeSession = async () => {
             setIsLoading(true)
 
-            // Récupérer l'utilisateur depuis le sessionService
             const currentUser = await sessionService.getCurrentUser()
             setUser(currentUser)
 
-            // Démarrer la surveillance de session si on a un utilisateur
             if (currentUser) {
                 sessionService.startSessionMonitoring(handleSessionExpired)
             }
@@ -82,14 +78,12 @@ export const useSession = (): UseSessionReturn => {
             setIsLoading(false)
         }
 
-        // Ne pas initialiser la session sur la page de login
         if (window.location.pathname !== '/login') {
             initializeSession()
         } else {
             setIsLoading(false)
         }
 
-        // Nettoyage à la destruction du composant
         return () => {
             sessionService.stopSessionMonitoring()
         }

@@ -9,6 +9,7 @@ import {
     LoginRequest,
     AddConnectionRequest,
     RegisterRequest,
+    UpdateUserRequest,
 } from '../models'
 
 // Interface pour les réponses d'erreur de l'API
@@ -97,6 +98,17 @@ export const api = {
         const result = await apiRequest<User>('/user')
         if (!result) {
             throw new Error("Échec de la récupération de l'utilisateur")
+        }
+        return result
+    },
+
+    async updateUser(updateRequest: UpdateUserRequest): Promise<User> {
+        const result = await apiRequest<User>('/user', {
+            method: 'PUT',
+            body: JSON.stringify(updateRequest),
+        })
+        if (!result) {
+            throw new Error("Échec de la mise à jour de l'utilisateur")
         }
         return result
     },

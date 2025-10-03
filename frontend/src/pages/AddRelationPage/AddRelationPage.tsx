@@ -97,6 +97,7 @@ const AddRelationPage: React.FC = () => {
                     <h1 className="page-title">Liste des relations</h1>
                     {connections.map((connection) => (
                         <div className="relation-item">
+                            <p>{connection.username}</p>
                             <p>{connection.email}</p>
                         </div>
                     ))}

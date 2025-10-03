@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -32,13 +33,27 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     String getPassword(@Param("email") String email);
 
     /**
-     * Update a user
-     * 
-     * @param user the user to update
+     * Update a user's username
      */
     @Modifying
-    @Query("UPDATE User u SET u.username = :username, u.email = :email, u.password = :password WHERE u.id = :id")
-    void updateUser(@Param("id") Integer id, @Param("username") String username, @Param("email") String email,
-            @Param("password") String password);
+    @Transactional
+    @Query("UPDATE User u SET u.username = :username WHERE u.id = :id")
+    void updateUsername(@Param("id") Integer id, @Param("username") String username);
+
+    /**
+     * Update a user's email
+     */
+    @Modifying
+    @Transactional
+    @Query("UPDATE User u SET u.email = :email WHERE u.id = :id")
+    void updateEmail(@Param("id") Integer id, @Param("email") String email);
+
+    /**
+     * Update a user's password
+     */
+    @Modifying
+    @Transactional
+    @Query("UPDATE User u SET u.password = :password WHERE u.id = :id")
+    void updatePassword(@Param("id") Integer id, @Param("password") String password);
 
 }

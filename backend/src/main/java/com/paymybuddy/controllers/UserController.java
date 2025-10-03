@@ -22,6 +22,7 @@ import com.paymybuddy.models.dtos.UserCredentialsDTO;
 import com.paymybuddy.services.interfaces.UserService;
 import com.paymybuddy.services.AuthenticationService;
 import com.paymybuddy.models.dtos.PublicUserDTO;
+import com.paymybuddy.models.dtos.UpdateUserRequest;
 import com.paymybuddy.logging.LoggingService;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -181,7 +182,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Données invalides"),
             @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
     })
-    public ResponseEntity<PublicUserDTO> updateUser(@RequestBody @Valid PublicUserDTO userDTO,
+    public ResponseEntity<PublicUserDTO> updateUser(@RequestBody @Valid UpdateUserRequest updateRequest,
             @AuthenticationPrincipal org.springframework.security.core.userdetails.User principal) {
         try {
             Optional<User> currentUser = userService.findByEmail(principal.getUsername());
@@ -189,23 +190,22 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
 
-            // Vérifier si l'email est déjà utilisé par un autre utilisateur
-            if (!currentUser.get().getEmail().equals(userDTO.getEmail())) {
-                Optional<User> existingUser = userService.findByEmail(userDTO.getEmail());
-                if (existingUser.isPresent() && !existingUser.get().getId().equals(currentUser.get().getId())) {
+            if (updateRequest.getEmail() != null && !updateRequest.getEmail().equals(currentUser.get().getEmail())) {
+                Optional<User> existingUser = userService.findByEmail(updateRequest.getEmail());
+                if (existingUser.isPresent()) {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
                 }
             }
 
-            PublicUserDTO updatedUser = userService.updateUser(
+            User updatedUser = userService.updateUser(
                     currentUser.get().getId(),
-                    userDTO.getUsername(),
-                    userDTO.getEmail(),
-                    null // Le mot de passe sera géré séparément si nécessaire
-            );
+                    updateRequest.getUsername(),
+                    updateRequest.getEmail(),
+                    updateRequest.getPassword());
 
             loggingService.info("UserController: User updated successfully - ID: " + currentUser.get().getId());
-            return ResponseEntity.ok(updatedUser);
+            return ResponseEntity
+                    .ok(new PublicUserDTO(updatedUser.getId(), updatedUser.getUsername(), updatedUser.getEmail()));
 
         } catch (Exception e) {
             loggingService.error("UserController: Update user error - " + e.getMessage());
