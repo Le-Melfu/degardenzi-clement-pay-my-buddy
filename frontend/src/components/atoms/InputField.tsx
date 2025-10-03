@@ -24,6 +24,8 @@ const InputField: React.FC<InputFieldProps> = ({
     required = false,
     error,
 }) => {
+    const inputId = `input-${label.toLowerCase().replace(/\s+/g, '-')}`
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         onChange?.(e.target.value)
     }
@@ -32,12 +34,13 @@ const InputField: React.FC<InputFieldProps> = ({
         <div className="input-field">
             <label
                 className={`input-field__label ${ariaHidden ? 'hidden' : ''}`}
+                htmlFor={inputId}
                 aria-hidden={ariaHidden}
             >
                 {label}
-                {required && <span className="input-field__required">*</span>}
             </label>
             <input
+                id={inputId}
                 type={type}
                 className={`input-field__input ${
                     error ? 'input-field__input--error' : ''
@@ -47,8 +50,19 @@ const InputField: React.FC<InputFieldProps> = ({
                 maxLength={type === 'text' ? maxLength : undefined}
                 onChange={handleChange}
                 required={required}
+                aria-describedby={error ? `${inputId}-error` : undefined}
+                aria-invalid={error ? 'true' : 'false'}
             />
-            {error && <span className="input-field__error">{error}</span>}
+            {error && (
+                <span
+                    id={`${inputId}-error`}
+                    className="input-field__error"
+                    role="alert"
+                    aria-live="polite"
+                >
+                    {error}
+                </span>
+            )}
         </div>
     )
 }

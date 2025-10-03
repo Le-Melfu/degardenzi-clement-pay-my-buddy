@@ -61,7 +61,7 @@ const LoginPage: React.FC = () => {
     }
 
     return (
-        <div className="login-page">
+        <div className="login-page page-enter">
             <Form
                 title="Pay My Buddy"
                 submitButtonText={'Se connecter'}

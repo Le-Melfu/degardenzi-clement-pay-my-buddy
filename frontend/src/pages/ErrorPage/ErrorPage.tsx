@@ -10,7 +10,7 @@ const ErrorPage: React.FC = () => {
     }
 
     return (
-        <div className="error-page">
+        <div className="error-page page-enter">
             <div className="error-content">
                 <div className="error-number">404</div>
                 <h1 className="error-title">Page non trouvée</h1>

@@ -64,7 +64,7 @@ const CreateAccountPage: React.FC = () => {
     }
 
     return (
-        <div className="create-account-page">
+        <div className="create-account-page page-enter">
             <div className="create-account-container">
                 <Form
                     title="Pay My Buddy"

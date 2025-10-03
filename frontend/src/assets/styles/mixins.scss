@@ -1,7 +1,6 @@
 @use 'variables' as variables;
 @use 'sass:color';
 
-// Mixins
 @mixin font-smoothing {
     font-synthesis: none;
     text-rendering: optimizeLegibility;
@@ -20,13 +19,11 @@
     transition: border-color variables.$transition-duration;
 }
 
-// Grid layout pour les tableaux (TransactionHistory et TransactionItem)
 @mixin table-grid {
     display: grid;
     grid-template-columns: 2fr 2fr 1fr;
 }
 
-// Responsive grid pour mobile
 @mixin table-grid-mobile {
     grid-template-columns: 1fr;
     gap: 0.5rem;
@@ -36,7 +33,6 @@
     margin-bottom: 0.5rem;
 }
 
-// Styles communs pour les cellules de tableau
 @mixin table-cell {
     word-wrap: break-word;
     overflow: hidden;
@@ -49,7 +45,6 @@
     box-sizing: border-box;
 }
 
-// Styles pour les barres de défilement personnalisées
 @mixin custom-scrollbar(
     $width: 8px,
     $track-color: variables.$light-border,
@@ -74,14 +69,12 @@
     }
 }
 
-// Styles communs pour les formulaires
 @mixin form-base {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
 }
 
-// Styles pour les champs de formulaire
 @mixin form-field {
     display: flex;
     flex-direction: column;

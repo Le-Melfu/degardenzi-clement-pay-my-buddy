@@ -66,7 +66,7 @@ const ProfilePage: React.FC = () => {
     }
 
     return (
-        <div className="profile-page">
+        <div className="profile-page page-scale">
             <div className="profile-container">
                 <div className="profile-content">
                     {isLoading ? (

@@ -112,7 +112,7 @@ const TransferPage: React.FC = () => {
     }
 
     return (
-        <div className="transfer-page">
+        <div className="transfer-page page-slide">
             <UserBalance balance={balance} onBalanceUpdate={loadBalance} />
 
             <div className="transfer-content">

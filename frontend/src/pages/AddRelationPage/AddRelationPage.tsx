@@ -69,7 +69,7 @@ const AddRelationPage: React.FC = () => {
     }, [])
 
     return (
-        <div className="add-relation-page">
+        <div className="add-relation-page page-scale">
             <div className="add-relation-content">
                 <div className="search-section-container">
                     <div className="search-section">
@@ -96,7 +96,7 @@ const AddRelationPage: React.FC = () => {
                 <div className="relations-list">
                     <h1 className="page-title">Liste des relations</h1>
                     {connections.map((connection) => (
-                        <div className="relation-item">
+                        <div key={connection.id} className="relation-item">
                             <p>{connection.username}</p>
                             <p>{connection.email}</p>
                         </div>

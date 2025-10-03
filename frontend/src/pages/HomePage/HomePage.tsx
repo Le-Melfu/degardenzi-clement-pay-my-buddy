@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 const HomePage: React.FC = () => {
     const navigate = useNavigate()
     return (
-        <div className="home-page">
+        <div className="home-page page-slide">
             <h1>Bienvenue sur Pay My Buddy</h1>
             <p>Gérez vos transactions facilement et en toute sécurité</p>
             <div className="home-page-buttons">
