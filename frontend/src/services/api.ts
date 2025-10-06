@@ -1,3 +1,4 @@
+// TODO: Sécuriser l'API - Utiliser HTTPS en production et variables d'environnement
 // Configuration de base
 const API_BASE_URL = 'http://localhost:8080'
 
@@ -41,6 +42,7 @@ async function apiRequest<T>(
     }
 
     try {
+        // TODO: Ajouter timeout pour les requêtes - Éviter les requêtes qui restent en attente
         const response = await fetch(url, config)
 
         if (!response.ok) {

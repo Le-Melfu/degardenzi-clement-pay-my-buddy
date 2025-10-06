@@ -9,14 +9,14 @@ $secondary-color: #f69f1d;
 $secondary-hover: color.adjust($secondary-color, $lightness: -10%);
 $secondary-light-hover: color.adjust($secondary-color, $lightness: -10%);
 
-$error-color: #ff0000;
+$error-color: #b80000;
 $error-hover: color.adjust($error-color, $lightness: -10%);
 $error-light-hover: color.adjust($error-color, $lightness: -10%);
 
 $black-color: #000000;
 $white-color: #ffffff;
 
-$success-color: #28a745;
+$success-color: #00752d;
 
 $light-bg: #ffffff;
 $light-text: #213547;
@@ -25,7 +25,7 @@ $light-border: #e0e0e0;
 $dark-border: #404040;
 
 // Additional colors for consistency
-$text-muted: #828282;
+$text-muted: #686868;
 $text-dark: #333333;
 $border-light: #e9ecef;
 $border-hover: #ced4da;

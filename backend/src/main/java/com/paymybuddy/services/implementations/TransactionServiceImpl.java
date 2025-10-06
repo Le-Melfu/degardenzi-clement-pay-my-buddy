@@ -19,7 +19,7 @@ import com.paymybuddy.services.interfaces.TransactionService;
 import io.micrometer.common.lang.NonNull;
 
 import com.paymybuddy.models.dtos.CreateTransactionRequestDTO;
-// import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
@@ -35,9 +35,9 @@ public class TransactionServiceImpl implements TransactionService {
         this.loggingService = loggingService;
     }
 
+    // TODO: remove status from transaction
     @Override
-    // TODO: Put transactional back in
-    // @Transactional
+    @Transactional
     public Transaction createTransaction(User sender, CreateTransactionRequestDTO transactionRequest) {
         Transaction savedTransaction = null;
 
@@ -62,10 +62,13 @@ public class TransactionServiceImpl implements TransactionService {
             transaction.setSender(sender);
             transaction.setReceiver(receiver);
 
+            // TODO: Corriger la logique de transaction - Vérifier le solde AVANT de créer
+            // la transaction
             // Save transaction
             savedTransaction = transactionRepository.save(transaction);
 
-            // Balance check
+            // Balance check - PROBLÈME: Vérification après sauvegarde, peut créer des
+            // incohérences
             if (sender.getBalanceInCents() < transactionRequest.getAmountInCents()) {
                 throw new InsufficientBalanceException("Solde insuffisant");
             }

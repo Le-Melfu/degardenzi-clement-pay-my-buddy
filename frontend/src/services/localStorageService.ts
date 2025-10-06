@@ -4,6 +4,7 @@ const USER_STORAGE_KEY = 'paymybuddy_user'
 const SESSION_TIMESTAMP_KEY = 'paymybuddy_session_timestamp'
 
 class LocalStorageService {
+    // TODO: Sécuriser le stockage - Chiffrer les données sensibles en localStorage
     // Sauvegarder l'utilisateur en local
     saveUser(user: User): void {
         localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user))

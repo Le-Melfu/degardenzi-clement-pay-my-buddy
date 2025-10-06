@@ -30,6 +30,8 @@ public class SecurityConfig {
                         .requestMatchers("/api-docs/**").permitAll()
                         .requestMatchers("/swagger-ui.html").permitAll()
                         .anyRequest().authenticated())
+                // TODO: Réactiver CSRF - Actuellement désactivé, créer un token CSRF pour la
+                // protection
                 .csrf(csrf -> csrf.disable())
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -63,7 +65,8 @@ public class SecurityConfig {
         // Méthodes HTTP autorisées
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
-        // Headers autorisés
+        // TODO: Restreindre les headers autorisés - "*" est trop permissif, spécifier
+        // les headers nécessaires
         configuration.setAllowedHeaders(Arrays.asList("*"));
 
         // Autoriser les cookies (important pour l'authentification par session)

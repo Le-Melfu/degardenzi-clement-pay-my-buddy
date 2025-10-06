@@ -32,11 +32,7 @@ const InputField: React.FC<InputFieldProps> = ({
 
     return (
         <div className="input-field">
-            <label
-                className={`input-field__label ${ariaHidden ? 'hidden' : ''}`}
-                htmlFor={inputId}
-                aria-hidden={ariaHidden}
-            >
+            <label className="input-field__label " htmlFor={inputId}>
                 {label}
             </label>
             <input

@@ -46,6 +46,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
          * @param userId the user ID
          * @return list of all transactions for the user
          */
+        // TODO: Ajouter la pagination - Modifier pour utiliser Pageable au lieu de List
         @Query("SELECT t FROM Transaction t WHERE t.sender.id = :userId OR t.receiver.id = :userId ORDER BY t.id DESC")
         List<Transaction> findAllTransactionsForUser(@Param("userId") Integer userId);
 

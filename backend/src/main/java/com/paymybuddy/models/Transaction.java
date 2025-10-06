@@ -30,7 +30,7 @@ public class Transaction {
     @Column(name = "amount_in_cents", nullable = false)
     private Long amountInCents;
 
-    // TODO: Remove
+    // TODO: Remove status from transaction
     // still use a separate column for the status to keep trace of the status of the
     // transaction (PENDING, CONFIRMED, CANCELLED)
     @Column(name = "status", nullable = false)

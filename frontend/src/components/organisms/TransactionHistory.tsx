@@ -17,9 +17,9 @@ const TransactionHistory: React.FC<TransactionHistoryProps> = ({
             <h2>Mes Transactions</h2>
             <div className="transactions-table">
                 <div className="table-header">
-                    <div className="header-cell">Relations</div>
-                    <div className="header-cell">Description</div>
-                    <div className="header-cell">Montant</div>
+                    <h3 className="header-cell">Relations</h3>
+                    <h3 className="header-cell">Description</h3>
+                    <h3 className="header-cell">Montant</h3>
                 </div>
                 <div className="table-body">
                     {transactions.length > 0 ? (

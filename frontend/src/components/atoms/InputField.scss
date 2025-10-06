@@ -9,9 +9,9 @@
     }
 
     &__label {
+        display: inline;
         color: variables.$light-text;
         font-size: 0.9rem;
-        display: none;
     }
 
     &__required {
