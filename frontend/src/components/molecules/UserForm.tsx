@@ -71,7 +71,14 @@ const UserForm: React.FC<UserFormProps> = ({
 
     const handleInputChange = (field: keyof FormData, value: string) => {
         setFormData((prev) => ({ ...prev, [field]: value }))
-        if (errors[field]) {
+
+        // Validate password length
+        if (field === 'password' && value && value.length < 6) {
+            setErrors((prev) => ({
+                ...prev,
+                password: 'Le mot de passe doit contenir au moins 6 caractères',
+            }))
+        } else if (errors[field]) {
             setErrors((prev) => ({ ...prev, [field]: undefined }))
         }
     }

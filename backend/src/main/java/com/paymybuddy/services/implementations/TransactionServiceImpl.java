@@ -10,7 +10,6 @@ import com.paymybuddy.exceptions.InvalidAmountException;
 import com.paymybuddy.exceptions.UserNotFoundException;
 import com.paymybuddy.logging.LoggingService;
 import com.paymybuddy.models.Transaction;
-import com.paymybuddy.models.TransactionStatus;
 import com.paymybuddy.models.User;
 import com.paymybuddy.repository.TransactionRepository;
 import com.paymybuddy.repository.UserRepository;
@@ -35,12 +34,10 @@ public class TransactionServiceImpl implements TransactionService {
         this.loggingService = loggingService;
     }
 
-    // TODO: remove status from transaction
     @Override
     @Transactional
     public Transaction createTransaction(User sender, CreateTransactionRequestDTO transactionRequest) {
-        Transaction savedTransaction = null;
-
+        Transaction finalTransaction = null;
         try {
             loggingService.info("Starting transaction creation for amount: " + transactionRequest.getAmountInCents()
                     + " cents from user " + sender.getId() + " to user "
@@ -55,24 +52,18 @@ public class TransactionServiceImpl implements TransactionService {
                     .orElseThrow(() -> new UserNotFoundException(
                             "user not found with ID: " + transactionRequest.getReceiverId()));
 
-            Transaction transaction = new Transaction();
-            transaction.setStatus(TransactionStatus.PENDING);
-            transaction.setAmountInCents(transactionRequest.getAmountInCents());
-            transaction.setDescription(transactionRequest.getDescription());
-            transaction.setSender(sender);
-            transaction.setReceiver(receiver);
-
-            // TODO: Corriger la logique de transaction - Vérifier le solde AVANT de créer
-            // la transaction
-            // Save transaction
-            savedTransaction = transactionRepository.save(transaction);
-
-            // Balance check - PROBLÈME: Vérification après sauvegarde, peut créer des
-            // incohérences
+            // Balance check
             if (sender.getBalanceInCents() < transactionRequest.getAmountInCents()) {
                 throw new InsufficientBalanceException("Solde insuffisant");
             }
             loggingService.info("Balance check passed. Sender balance: " + sender.getBalanceInCents() + " cents");
+
+            // Create transaction
+            Transaction transaction = new Transaction();
+            transaction.setAmountInCents(transactionRequest.getAmountInCents());
+            transaction.setDescription(transactionRequest.getDescription());
+            transaction.setSender(sender);
+            transaction.setReceiver(receiver);
 
             // Update balances
             sender.setBalanceInCents(sender.getBalanceInCents() - transactionRequest.getAmountInCents());
@@ -82,27 +73,12 @@ public class TransactionServiceImpl implements TransactionService {
             loggingService.info("Balances updated. New sender balance: " + sender.getBalanceInCents()
                     + " cents, New receiver balance: " + receiver.getBalanceInCents() + " cents");
 
-            savedTransaction.setStatus(TransactionStatus.SUCCESS);
-            savedTransaction.setDescription(transactionRequest.getDescription());
-            Transaction finalTransaction = transactionRepository.save(savedTransaction);
+            finalTransaction = transactionRepository.save(transaction);
             loggingService.info("Transaction created successfully with ID: " + finalTransaction.getId());
-
-            return finalTransaction;
-
         } catch (Exception e) {
-            // Update transaction to FAILED if it exists
-            if (savedTransaction != null) {
-                savedTransaction.setStatus(TransactionStatus.FAILED);
-                // this message is sent to the client
-                savedTransaction.setDescription("Transaction échouée: " + e.getMessage());
-                transactionRepository.save(savedTransaction);
-                loggingService
-                        .error("Transaction failed with ID: " + savedTransaction.getId() + " - " + e.getMessage());
-            } else {
-                loggingService.error("Transaction failed before creation - " + e.getMessage());
-            }
-            throw e;
+            loggingService.error("Transaction failed before creation - " + e.getMessage());
         }
+        return finalTransaction;
     }
 
     @Override

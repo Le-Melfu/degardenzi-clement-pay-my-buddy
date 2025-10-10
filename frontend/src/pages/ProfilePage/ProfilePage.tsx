@@ -51,15 +51,40 @@ const ProfilePage: React.FC = () => {
     const handleSave = async (updateRequest: UpdateUserRequest) => {
         setIsSaving(true)
         try {
+            const emailChanged = updateRequest.email !== undefined
             const updatedUser = await api.updateUser(updateRequest)
-            updateUser(updatedUser)
 
-            setIsEditing(false)
+            // If email was changed, the session is invalidated and we need to re-login
+            if (emailChanged) {
+                showSnackbar(
+                    'Email modifié avec succès. Veuillez vous reconnecter avec votre nouvel email.',
+                    true
+                )
+                // Wait for the snackbar to be visible, then logout
+                setTimeout(async () => {
+                    await window.location.assign('/login')
+                }, 2000)
+            } else {
+                updateUser(updatedUser)
+                showSnackbar('Profil mis à jour avec succès', true)
+                setIsEditing(false)
+            }
         } catch (error) {
-            showSnackbar(
-                "Erreur lors de la mise à jour de l'utilisateur",
-                false
-            )
+            const err = error as Error
+            if (err.message === 'SESSION_EXPIRED') {
+                showSnackbar(
+                    'Session expirée. Veuillez vous reconnecter.',
+                    false
+                )
+                setTimeout(() => {
+                    window.location.assign('/login')
+                }, 2000)
+            } else {
+                showSnackbar(
+                    "Erreur lors de la mise à jour de l'utilisateur",
+                    false
+                )
+            }
         } finally {
             setIsSaving(false)
         }

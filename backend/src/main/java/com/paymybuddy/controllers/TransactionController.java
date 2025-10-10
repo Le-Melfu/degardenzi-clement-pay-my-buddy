@@ -87,8 +87,6 @@ public class TransactionController {
             @AuthenticationPrincipal org.springframework.security.core.userdetails.User principal) {
         String userEmail = principal.getUsername();
         Optional<User> user = userService.findByEmail(userEmail);
-        // TODO: Ajouter la pagination - Implémenter Pageable pour les listes de
-        // transactions
         return ResponseEntity.ok(transactionService.getUserTransactions(user.get().getId()));
     }
 }

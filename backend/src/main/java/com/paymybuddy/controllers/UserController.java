@@ -183,18 +183,21 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
     })
     public ResponseEntity<PublicUserDTO> updateUser(@RequestBody @Valid UpdateUserRequest updateRequest,
-            @AuthenticationPrincipal org.springframework.security.core.userdetails.User principal) {
+            @AuthenticationPrincipal org.springframework.security.core.userdetails.User principal,
+            HttpServletRequest request) {
         try {
             Optional<User> currentUser = userService.findByEmail(principal.getUsername());
             if (currentUser.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
 
+            boolean emailChanged = false;
             if (updateRequest.getEmail() != null && !updateRequest.getEmail().equals(currentUser.get().getEmail())) {
                 Optional<User> existingUser = userService.findByEmail(updateRequest.getEmail());
                 if (existingUser.isPresent()) {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
                 }
+                emailChanged = true;
             }
 
             User updatedUser = userService.updateUser(
@@ -202,6 +205,18 @@ public class UserController {
                     updateRequest.getUsername(),
                     updateRequest.getEmail(),
                     updateRequest.getPassword());
+
+            // If email changed, invalidate session to force re-authentication with new
+            // email
+            if (emailChanged) {
+                loggingService.info("UserController: Email changed, invalidating session for user ID: "
+                        + currentUser.get().getId());
+                org.springframework.security.core.context.SecurityContextHolder.clearContext();
+                HttpSession session = request.getSession(false);
+                if (session != null) {
+                    session.invalidate();
+                }
+            }
 
             loggingService.info("UserController: User updated successfully - ID: " + currentUser.get().getId());
             return ResponseEntity

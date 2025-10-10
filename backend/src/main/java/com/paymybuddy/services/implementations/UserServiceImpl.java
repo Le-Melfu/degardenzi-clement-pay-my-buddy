@@ -35,8 +35,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public PublicUserDTO register(User user) {
         try {
-            // TODO: Améliorer le chiffrement - Ajouter un salt personnalisé et vérifier la
-            // force du mot de passe
             // Encode the password with BCrypt
             String encodedPassword = passwordEncoder.encode(user.getPassword());
             user.setBalanceInCents(10000L);
@@ -89,6 +87,7 @@ public class UserServiceImpl implements UserService {
 
             // Update password if provided
             if (password != null && !password.trim().isEmpty()) {
+                System.out.println("Password: " + password.trim());
                 String encodedPassword = passwordEncoder.encode(password.trim());
                 userRepository.updatePassword(userId, encodedPassword);
             }
