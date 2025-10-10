@@ -1,6 +1,7 @@
-import React, { createContext, useContext, ReactNode } from 'react'
+import React, { createContext, useContext, ReactNode, useEffect } from 'react'
 import { useSession } from '../hooks/useSession'
 import { User } from '../models'
+import { api } from '../services/api'
 
 interface SessionContextType {
     user: User | null
@@ -21,6 +22,12 @@ interface SessionProviderProps {
 export const SessionProvider: React.FC<SessionProviderProps> = ({
     children,
 }) => {
+    useEffect(() => {
+        // Initialize CSRF token when app starts
+        // This ensures the XSRF-TOKEN cookie is set before any write operation
+        api.initializeCsrf()
+    }, [])
+
     const session = useSession()
 
     return (

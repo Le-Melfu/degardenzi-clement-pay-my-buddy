@@ -43,6 +43,13 @@ const InputField: React.FC<InputFieldProps> = ({
                 }`}
                 placeholder={placeholder}
                 value={value}
+                autoComplete={
+                    type === 'password'
+                        ? 'password'
+                        : type === 'email'
+                        ? 'email'
+                        : 'off'
+                }
                 maxLength={type === 'text' ? maxLength : undefined}
                 onChange={handleChange}
                 required={required}

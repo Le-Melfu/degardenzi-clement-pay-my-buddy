@@ -235,7 +235,7 @@ public class TransactionServiceTest {
 
         assertNotNull(result);
         assertEquals(2, result.size());
-        assertEquals(sender, result.get(0).getSender());
-        assertEquals(sender, result.get(1).getReceiver());
+        assertEquals(sender.getId(), result.get(0).getSender().getId());
+        assertEquals(sender.getId(), result.get(1).getReceiver().getId());
     }
 }

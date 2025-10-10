@@ -4,6 +4,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -12,6 +15,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.boot.web.servlet.server.CookieSameSiteSupplier;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,17 +25,25 @@ public class SecurityConfig {
 
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-                http
-                                .authorizeHttpRequests(authz -> authz
-                                                .requestMatchers("/register").permitAll()
-                                                .requestMatchers("/login").permitAll()
-                                                .anyRequest().authenticated())
-                                .csrf(csrf -> csrf.disable())
+
+                CsrfTokenRequestAttributeHandler requestHandler = new CsrfTokenRequestAttributeHandler();
+                requestHandler.setCsrfRequestAttributeName("_csrf");
+
+                http.authorizeHttpRequests(authz -> authz
+                                .requestMatchers("/register", "/csrf").permitAll()
+                                .requestMatchers("/login").permitAll()
+                                .anyRequest().authenticated())
+                                .csrf(csrf -> csrf
+                                                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                                                .csrfTokenRequestHandler(requestHandler))
                                 .httpBasic(httpBasic -> httpBasic.disable())
                                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                                 .sessionManagement(session -> session
-                                                .maximumSessions(1)
-                                                .maxSessionsPreventsLogin(false));
+                                                .sessionFixation().migrateSession()
+                                                .sessionConcurrency(concurrency -> concurrency
+                                                                .maximumSessions(1)
+                                                                .maxSessionsPreventsLogin(false)))
+                                .addFilterAfter(new CsrfCookieFilter(), CsrfFilter.class);
 
                 return http.build();
         }
@@ -59,12 +71,14 @@ public class SecurityConfig {
                 configuration.setAllowedHeaders(Arrays.asList(
                                 "Content-Type",
                                 "Accept",
-                                "X-Requested-With"));
+                                "X-Requested-With",
+                                "X-XSRF-TOKEN"));
 
                 configuration.setAllowCredentials(true);
 
                 configuration.setExposedHeaders(Arrays.asList(
-                                "Content-Type"));
+                                "Content-Type",
+                                "X-XSRF-TOKEN"));
 
                 configuration.setMaxAge(3600L);
 
@@ -72,5 +86,14 @@ public class SecurityConfig {
                 source.registerCorsConfiguration("/**", configuration);
 
                 return source;
+        }
+
+        /**
+         * Configure SameSite attribute for CSRF cookie
+         * Note: The Secure attribute is managed by application.properties
+         */
+        @Bean
+        public CookieSameSiteSupplier cookieSameSiteSupplier() {
+                return CookieSameSiteSupplier.ofLax().whenHasName("XSRF-TOKEN");
         }
 }

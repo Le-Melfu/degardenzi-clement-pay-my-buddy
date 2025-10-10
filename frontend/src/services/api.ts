@@ -21,6 +21,26 @@ interface ApiErrorResponse {
     message: string
 }
 
+/**
+ * Utility function to read a cookie by name
+ * Used to extract the CSRF token sent by Spring Security
+ */
+function getCookie(name: string): string | undefined {
+    return document.cookie
+        .split('; ')
+        .find((row) => row.startsWith(name + '='))
+        ?.split('=')[1]
+}
+
+/**
+ * Check if the HTTP method requires CSRF protection
+ */
+function requiresCsrfToken(method?: string): boolean {
+    if (!method) return false
+    const writeMethods = ['POST', 'PUT', 'PATCH', 'DELETE']
+    return writeMethods.includes(method.toUpperCase())
+}
+
 // Fonction utilitaire pour les requêtes
 async function apiRequest<T>(
     endpoint: string,
@@ -28,8 +48,18 @@ async function apiRequest<T>(
 ): Promise<T | null> {
     const url = `${API_BASE_URL}${endpoint}`
 
+    // Build default headers
     const defaultHeaders: HeadersInit = {
         'Content-Type': 'application/json',
+    }
+
+    // Add CSRF token only for write operations (POST, PUT, PATCH, DELETE)
+    // Spring Security validates this header against the XSRF-TOKEN cookie
+    if (requiresCsrfToken(options.method)) {
+        const csrfToken = getCookie('XSRF-TOKEN')
+        if (csrfToken) {
+            defaultHeaders['X-XSRF-TOKEN'] = csrfToken
+        }
     }
 
     const config: RequestInit = {
@@ -38,6 +68,7 @@ async function apiRequest<T>(
             ...defaultHeaders,
             ...options.headers,
         },
+        // Include credentials to send/receive cookies (JSESSIONID, XSRF-TOKEN)
         credentials: 'include',
     }
 
@@ -85,8 +116,54 @@ async function apiRequest<T>(
     }
 }
 
+/**
+ * Initialize CSRF token by making a request to the /csrf endpoint
+ * This ensures the XSRF-TOKEN cookie is set before any write operation
+ * Should be called when the application starts
+ */
+async function initializeCsrfToken(): Promise<void> {
+    try {
+        await fetch(`${API_BASE_URL}/csrf`, {
+            method: 'GET',
+            credentials: 'include',
+        })
+    } catch (error) {
+        console.error('Failed to initialize CSRF token:', error)
+    }
+}
+
+/**
+ * Verify CSRF protection is working correctly
+ * For development/testing purposes
+ */
+async function verifyCsrfProtection(): Promise<{
+    cookiePresent: boolean
+    cookieValue: string | undefined
+}> {
+    // First, ensure token is initialized
+    await initializeCsrfToken()
+
+    // Check if cookie is present
+    const cookieValue = getCookie('XSRF-TOKEN')
+
+    return {
+        cookiePresent: !!cookieValue,
+        cookieValue,
+    }
+}
+
 // Méthodes API
 export const api = {
+    /**
+     * Initialize CSRF token from backend
+     * Call this when the app starts to ensure CSRF cookie is set
+     */
+    initializeCsrf: initializeCsrfToken,
+
+    /**
+     * Verify CSRF configuration (dev/test only)
+     */
+    verifyCsrf: verifyCsrfProtection,
     // Authentification
     async login(credentials: LoginRequest): Promise<User> {
         const result = await apiRequest<User>('/login', {
