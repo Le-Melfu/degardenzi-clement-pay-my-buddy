@@ -1,6 +1,6 @@
-// TODO: Sécuriser l'API - Utiliser HTTPS en production et variables d'environnement
 // Configuration de base
-const API_BASE_URL = 'http://localhost:8080'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+const API_TIMEOUT_MILLISECONDS = 10000
 
 // Import des modèles
 import {
@@ -42,8 +42,19 @@ async function apiRequest<T>(
     }
 
     try {
-        // TODO: Ajouter timeout pour les requêtes - Éviter les requêtes qui restent en attente
-        const response = await fetch(url, config)
+        // Gestion du timeout
+        const controller = new AbortController()
+        const timeoutId = setTimeout(
+            () => controller.abort(),
+            API_TIMEOUT_MILLISECONDS
+        )
+
+        const response = await fetch(url, {
+            ...config,
+            signal: controller.signal,
+        })
+
+        clearTimeout(timeoutId)
 
         if (!response.ok) {
             if (response.status === 401) {
@@ -67,6 +78,9 @@ async function apiRequest<T>(
 
         return null
     } catch (error) {
+        if (error instanceof Error && error.name === 'AbortError') {
+            throw new Error('La requête a expiré. Veuillez réessayer.')
+        }
         throw error
     }
 }

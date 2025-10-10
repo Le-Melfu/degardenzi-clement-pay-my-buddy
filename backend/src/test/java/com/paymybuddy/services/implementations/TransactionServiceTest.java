@@ -20,6 +20,7 @@ import com.paymybuddy.logging.LoggingService;
 import com.paymybuddy.models.Transaction;
 import com.paymybuddy.models.User;
 import com.paymybuddy.models.dtos.CreateTransactionRequestDTO;
+import com.paymybuddy.models.dtos.PublicTransactionDTO;
 import com.paymybuddy.repository.TransactionRepository;
 import com.paymybuddy.repository.UserRepository;
 
@@ -173,33 +174,6 @@ public class TransactionServiceTest {
     }
 
     @Test
-    void testGetTransaction_Found() {
-        Transaction transaction = new Transaction();
-        transaction.setId(1);
-        transaction.setSender(sender);
-        transaction.setReceiver(receiver);
-        transaction.setAmountInCents(1000L);
-
-        when(transactionRepository.findById(1)).thenReturn(Optional.of(transaction));
-
-        Optional<Transaction> result = transactionService.getTransaction(1);
-
-        assertTrue(result.isPresent());
-        assertEquals(1, result.get().getId());
-        assertEquals(sender, result.get().getSender());
-        assertEquals(receiver, result.get().getReceiver());
-    }
-
-    @Test
-    void testGetTransaction_NotFound() {
-        when(transactionRepository.findById(999)).thenReturn(Optional.empty());
-
-        Optional<Transaction> result = transactionService.getTransaction(999);
-
-        assertFalse(result.isPresent());
-    }
-
-    @Test
     void testGetUserTransactions_WithMultipleTransactions() {
         Transaction transaction1 = new Transaction();
         transaction1.setId(1);
@@ -217,7 +191,7 @@ public class TransactionServiceTest {
 
         when(transactionRepository.findAllTransactionsForUser(1)).thenReturn(transactions);
 
-        List<Transaction> result = transactionService.getUserTransactions(1);
+        List<PublicTransactionDTO> result = transactionService.getUserTransactions(1);
 
         assertNotNull(result);
         assertEquals(2, result.size());
@@ -229,7 +203,7 @@ public class TransactionServiceTest {
     void testGetUserTransactions_WithNoTransactions() {
         when(transactionRepository.findAllTransactionsForUser(1)).thenReturn(new ArrayList<>());
 
-        List<Transaction> result = transactionService.getUserTransactions(1);
+        List<PublicTransactionDTO> result = transactionService.getUserTransactions(1);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -257,7 +231,7 @@ public class TransactionServiceTest {
 
         when(transactionRepository.findAllTransactionsForUser(1)).thenReturn(transactions);
 
-        List<Transaction> result = transactionService.getUserTransactions(1);
+        List<PublicTransactionDTO> result = transactionService.getUserTransactions(1);
 
         assertNotNull(result);
         assertEquals(2, result.size());

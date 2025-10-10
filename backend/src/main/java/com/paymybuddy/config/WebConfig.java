@@ -26,12 +26,12 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(@NonNull CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOriginPatterns("http://localhost:5173", "http://localhost:3000") // URLs du frontend
+                .allowedOriginPatterns("http://localhost:5173", "http://localhost:3000")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH")
                 .allowedHeaders("*")
                 .exposedHeaders("Authorization", "Content-Type", "X-Requested-With", "accept", "Origin",
                         "Access-Control-Request-Method", "Access-Control-Request-Headers")
-                .allowCredentials(true) // Important pour les sessions
-                .maxAge(3600); // Cache preflight pour 1 heure
+                .allowCredentials(true)
+                .maxAge(3600);
     }
 }

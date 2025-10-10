@@ -105,10 +105,8 @@ const LoginPage: React.FC = () => {
                     placeholder="Votre mot de passe"
                     value={password}
                     onChange={handlePasswordChange}
-                    error={passwordError}
                     required
                 />
-                {error && <div className="error-message">{error}</div>}
             </Form>
             <Snackbar
                 message={snackbar.message}

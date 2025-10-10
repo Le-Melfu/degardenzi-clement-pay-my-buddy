@@ -19,68 +19,58 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/register").permitAll()
-                        .requestMatchers("/login").permitAll()
-                        .requestMatchers("/swagger-ui/**").permitAll()
-                        .requestMatchers("/v3/api-docs/**").permitAll()
-                        .requestMatchers("/api-docs/**").permitAll()
-                        .requestMatchers("/swagger-ui.html").permitAll()
-                        .anyRequest().authenticated())
-                .csrf(csrf -> csrf.disable())
-                .httpBasic(httpBasic -> httpBasic.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .sessionManagement(session -> session
-                        .maximumSessions(1)
-                        .maxSessionsPreventsLogin(false));
+        @Bean
+        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+                http
+                                .authorizeHttpRequests(authz -> authz
+                                                .requestMatchers("/register").permitAll()
+                                                .requestMatchers("/login").permitAll()
+                                                .anyRequest().authenticated())
+                                .csrf(csrf -> csrf.disable())
+                                .httpBasic(httpBasic -> httpBasic.disable())
+                                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                                .sessionManagement(session -> session
+                                                .maximumSessions(1)
+                                                .maxSessionsPreventsLogin(false));
 
-        return http.build();
-    }
+                return http.build();
+        }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+                return new BCryptPasswordEncoder();
+        }
 
-    @Bean
-    public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration authConfig) throws Exception {
-        return authConfig.getAuthenticationManager();
-    }
+        @Bean
+        public AuthenticationManager authenticationManager(
+                        AuthenticationConfiguration authConfig) throws Exception {
+                return authConfig.getAuthenticationManager();
+        }
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        final List<String> FRONTEND_URLS = Arrays.asList("http://localhost:5173", "http://127.0.0.1:5173",
-                "http://localhost:4173", "http://127.0.0.1:4173");
-        // Frontend URLs
-        configuration.setAllowedOriginPatterns(FRONTEND_URLS);
+        @Bean
+        public CorsConfigurationSource corsConfigurationSource() {
+                CorsConfiguration configuration = new CorsConfiguration();
+                final List<String> FRONTEND_URLS = Arrays.asList("http://localhost:5173", "http://127.0.0.1:5173",
+                                "http://localhost:4173", "http://127.0.0.1:4173");
+                configuration.setAllowedOriginPatterns(FRONTEND_URLS);
 
-        // HTTP methods
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
-        // Allowed request headers
-        configuration.setAllowedHeaders(Arrays.asList(
-                "Content-Type",
-                "Accept",
-                "X-Requested-With"));
+                configuration.setAllowedHeaders(Arrays.asList(
+                                "Content-Type",
+                                "Accept",
+                                "X-Requested-With"));
 
-        // Allow cookies for session auth
-        configuration.setAllowCredentials(true);
+                configuration.setAllowCredentials(true);
 
-        // Exposed response headers
-        configuration.setExposedHeaders(Arrays.asList(
-                "Content-Type"));
+                configuration.setExposedHeaders(Arrays.asList(
+                                "Content-Type"));
 
-        // CORS cache duration (seconds)
-        configuration.setMaxAge(3600L);
+                configuration.setMaxAge(3600L);
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+                UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+                source.registerCorsConfiguration("/**", configuration);
 
-        return source;
-    }
+                return source;
+        }
 }

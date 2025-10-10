@@ -24,6 +24,8 @@ import com.paymybuddy.logging.LoggingService;
 import com.paymybuddy.models.Transaction;
 import com.paymybuddy.models.User;
 import com.paymybuddy.models.dtos.CreateTransactionRequestDTO;
+import com.paymybuddy.models.dtos.PublicTransactionDTO;
+import com.paymybuddy.models.dtos.PublicUserDTO;
 import com.paymybuddy.services.interfaces.TransactionService;
 import com.paymybuddy.services.interfaces.UserService;
 
@@ -129,42 +131,6 @@ public class TransactionControllerTest {
 
     @Test
     @WithMockUser(username = "sender@example.com")
-    void testGetTransaction_Success() throws Exception {
-        when(userService.findByEmail("sender@example.com")).thenReturn(Optional.of(sender));
-        when(transactionService.getTransaction(1)).thenReturn(Optional.of(transaction));
-
-        mockMvc.perform(get("/transactions/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.amountInCents").value(1000));
-    }
-
-    @Test
-    @WithMockUser(username = "sender@example.com")
-    void testGetTransaction_NotFound() throws Exception {
-        when(userService.findByEmail("sender@example.com")).thenReturn(Optional.of(sender));
-        when(transactionService.getTransaction(999)).thenReturn(Optional.empty());
-
-        mockMvc.perform(get("/transactions/999"))
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
-    @WithMockUser(username = "other@example.com")
-    void testGetTransaction_Forbidden() throws Exception {
-        User otherUser = new User();
-        otherUser.setId(3);
-        otherUser.setEmail("other@example.com");
-
-        when(userService.findByEmail("other@example.com")).thenReturn(Optional.of(otherUser));
-        when(transactionService.getTransaction(1)).thenReturn(Optional.of(transaction));
-
-        mockMvc.perform(get("/transactions/1"))
-                .andExpect(status().isForbidden());
-    }
-
-    @Test
-    @WithMockUser(username = "sender@example.com")
     void testGetTransactions_Success() throws Exception {
         Transaction transaction2 = new Transaction();
         transaction2.setId(2);
@@ -172,7 +138,11 @@ public class TransactionControllerTest {
         transaction2.setReceiver(receiver);
         transaction2.setAmountInCents(2000L);
 
-        List<Transaction> transactions = Arrays.asList(transaction, transaction2);
+        List<PublicTransactionDTO> transactions = Arrays.asList(
+                new PublicTransactionDTO(1, new PublicUserDTO(1, "sender", "sender@example.com"),
+                        new PublicUserDTO(2, "receiver", "receiver@example.com"), "Test transaction", 1000L),
+                new PublicTransactionDTO(2, new PublicUserDTO(1, "sender", "sender@example.com"),
+                        new PublicUserDTO(2, "receiver", "receiver@example.com"), "Test transaction", 2000L));
 
         when(userService.findByEmail("sender@example.com")).thenReturn(Optional.of(sender));
         when(transactionService.getUserTransactions(1)).thenReturn(transactions);

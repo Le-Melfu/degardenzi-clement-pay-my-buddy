@@ -1,7 +1,7 @@
 package com.paymybuddy.services.implementations;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -15,9 +15,9 @@ import com.paymybuddy.repository.TransactionRepository;
 import com.paymybuddy.repository.UserRepository;
 import com.paymybuddy.services.interfaces.TransactionService;
 
-import io.micrometer.common.lang.NonNull;
-
 import com.paymybuddy.models.dtos.CreateTransactionRequestDTO;
+import com.paymybuddy.models.dtos.PublicTransactionDTO;
+import com.paymybuddy.models.dtos.PublicUserDTO;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -82,13 +82,15 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Optional<Transaction> getTransaction(@NonNull Integer transactionId) {
-        return transactionRepository.findById(transactionId);
-    }
-
-    @Override
-    public List<Transaction> getUserTransactions(Integer userId) {
-        return transactionRepository.findAllTransactionsForUser(userId);
+    public List<PublicTransactionDTO> getUserTransactions(Integer userId) {
+        return transactionRepository.findAllTransactionsForUser(userId).stream()
+                .map(transaction -> new PublicTransactionDTO(transaction.getId(),
+                        new PublicUserDTO(transaction.getSender().getId(), transaction.getSender().getUsername(),
+                                transaction.getSender().getEmail()),
+                        new PublicUserDTO(transaction.getReceiver().getId(), transaction.getReceiver().getUsername(),
+                                transaction.getReceiver().getEmail()),
+                        transaction.getDescription(), transaction.getAmountInCents()))
+                .collect(Collectors.toList());
     }
 
 }

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.lang.NonNull;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
@@ -29,15 +28,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
          * @return list of transactions received by the user
          */
         List<Transaction> findByReceiverId(Integer receiverId);
-
-        /**
-         * Find a transaction by its ID
-         * 
-         * @param transactionId
-         * @return a specific transaction
-         */
-        @NonNull
-        Optional<Transaction> findById(@NonNull Integer transactionId);
 
         /**
          * Find all transactions for a user (both sent and received)
