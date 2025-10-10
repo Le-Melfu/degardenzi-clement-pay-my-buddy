@@ -12,6 +12,7 @@ const CreateAccountPage: React.FC = () => {
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [passwordError, setPasswordError] = useState<string | undefined>()
     const [isLoading, setIsLoading] = useState(false)
     const [snackbar, setSnackbar] = useState<{
         isVisible: boolean
@@ -35,11 +36,31 @@ const CreateAccountPage: React.FC = () => {
         setSnackbar((prev) => ({ ...prev, isVisible: false }))
     }
 
+    const handlePasswordChange = (value: string) => {
+        setPassword(value)
+
+        if (value && value.length < 6) {
+            setPasswordError(
+                'Le mot de passe doit contenir au moins 6 caractères'
+            )
+        } else {
+            setPasswordError(undefined)
+        }
+    }
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
 
         if (!username || !email || !password) {
             showSnackbar('Veuillez remplir tous les champs', false)
+            return
+        }
+
+        if (password.length < 6) {
+            showSnackbar(
+                'Le mot de passe doit contenir au moins 6 caractères',
+                false
+            )
             return
         }
 
@@ -94,7 +115,8 @@ const CreateAccountPage: React.FC = () => {
                         type="password"
                         placeholder="Mot de passe"
                         value={password}
-                        onChange={setPassword}
+                        onChange={handlePasswordChange}
+                        error={passwordError}
                         required
                     />
                 </Form>

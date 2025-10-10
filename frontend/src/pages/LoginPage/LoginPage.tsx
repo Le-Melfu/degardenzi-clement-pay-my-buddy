@@ -12,6 +12,7 @@ import Snackbar from '../../components/atoms/Snackbar'
 const LoginPage: React.FC = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [passwordError, setPasswordError] = useState<string | undefined>()
     const [error, setError] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
@@ -38,10 +39,31 @@ const LoginPage: React.FC = () => {
         setSnackbar((prev) => ({ ...prev, isVisible: false }))
     }
 
+    const handlePasswordChange = (value: string) => {
+        setPassword(value)
+
+        if (value && value.length < 6) {
+            setPasswordError(
+                'Le mot de passe doit contenir au moins 6 caractères'
+            )
+        } else {
+            setPasswordError(undefined)
+        }
+    }
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setError('')
         setIsLoading(true)
+
+        if (password.length < 6) {
+            showSnackbar(
+                'Le mot de passe doit contenir au moins 6 caractères',
+                false
+            )
+            setIsLoading(false)
+            return
+        }
 
         try {
             const user: User = await api.login({
@@ -82,7 +104,8 @@ const LoginPage: React.FC = () => {
                     type="password"
                     placeholder="Votre mot de passe"
                     value={password}
-                    onChange={setPassword}
+                    onChange={handlePasswordChange}
+                    error={passwordError}
                     required
                 />
                 {error && <div className="error-message">{error}</div>}

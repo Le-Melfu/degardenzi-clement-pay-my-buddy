@@ -14,19 +14,19 @@ INSERT INTO user_connections (user_id, connection_id) VALUES
 
 
 -- Transactions
-INSERT INTO transactions (sender_id, receiver_id, description, amount_in_cents, status) VALUES 
-(1, 2, 'Déjeuner', 500, 'SUCCESS'),
-(2, 1, 'Partage Uber', 200, 'SUCCESS'),
-(1, 2, 'Café', 150, 'SUCCESS'),
-(2, 1, 'Cinéma', 800, 'SUCCESS'),
-(1, 2, 'Courses partagées', 1200, 'SUCCESS'),
-(2, 1, 'Restaurant', 1500, 'SUCCESS'),
-(1, 2, 'Taxi', 600, 'SUCCESS'),
-(2, 1, 'Boissons', 300, 'SUCCESS'),
-(1, 2, 'Pizza', 900, 'SUCCESS'),
-(2, 1, 'Musée', 400, 'SUCCESS'),
-(1, 2, 'Petit-déjeuner', 250, 'SUCCESS'),
-(2, 1, 'Livres', 750, 'SUCCESS'),
-(1, 2, 'Cadeau anniversaire', 2000, 'SUCCESS'),
-(2, 1, 'Sport', 350, 'SUCCESS'),
-(1, 2, 'Apéro', 450, 'SUCCESS');
+INSERT INTO transactions (sender_id, receiver_id, description, amount_in_cents) VALUES 
+(1, 2, 'Déjeuner', 500),
+(2, 1, 'Partage Uber', 200),
+(1, 2, 'Café', 150),
+(2, 1, 'Cinéma', 800),
+(1, 2, 'Courses partagées', 1200),
+(2, 1, 'Restaurant', 1500),
+(1, 2, 'Taxi', 600),
+(2, 1, 'Boissons', 300),
+(1, 2, 'Pizza', 900),
+(2, 1, 'Musée', 400),
+(1, 2, 'Petit-déjeuner', 250),
+(2, 1, 'Livres', 750),
+(1, 2, 'Cadeau anniversaire', 2000),
+(2, 1, 'Sport', 350),
+(1, 2, 'Apéro', 450);
