@@ -1,0 +1,59 @@
+@use '../../assets/styles/variables' as variables;
+@use '../../assets/styles/mixins' as mixins;
+
+.circular-progress {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    &__spinner {
+        border-radius: 50%;
+        border: 2px solid transparent;
+        border-top: 2px solid currentColor;
+        animation: spin 1s linear infinite;
+    }
+
+    // Tailles
+    &--small {
+        .circular-progress__spinner {
+            width: 16px;
+            height: 16px;
+        }
+    }
+
+    &--medium {
+        .circular-progress__spinner {
+            width: 24px;
+            height: 24px;
+        }
+    }
+
+    &--large {
+        .circular-progress__spinner {
+            width: 32px;
+            height: 32px;
+        }
+    }
+
+    // Couleurs
+    &--primary {
+        color: variables.$primary-color;
+    }
+
+    &--secondary {
+        color: variables.$secondary-color;
+    }
+
+    &--white {
+        color: variables.$white-color;
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

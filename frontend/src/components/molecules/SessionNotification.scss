@@ -1,0 +1,17 @@
+@use '../../assets/styles/variables' as variables;
+
+.session-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: variables.$secondary-color;
+    color: variables.$white-color;
+    padding: 15px;
+    border-radius: variables.$border-radius;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.session-notification-text {
+    margin: 0;
+}

@@ -69,7 +69,6 @@ public class GlobalExceptionHandler {
         Map<String, Object> errorResponse = new HashMap<>();
         errorResponse.put("timestamp", LocalDateTime.now());
 
-        // Déterminer le statut HTTP approprié selon le message
         HttpStatus status;
         String error;
 

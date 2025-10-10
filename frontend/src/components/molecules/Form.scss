@@ -1,0 +1,59 @@
+@use '../../assets/styles/variables' as variables;
+@use '../../assets/styles/mixins' as mixins;
+
+.form {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+
+    @include mixins.form-base;
+    padding: 4rem;
+    background-color: variables.$light-bg;
+    border: 1px solid variables.$black-color;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.08);
+
+    & > * {
+        font-weight: 700;
+    }
+
+    &__header {
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    &__title {
+        padding: 1rem;
+        background-color: variables.$secondary-color;
+        border-radius: variables.$border-radius;
+        color: variables.$white-color;
+        font-size: 1.5rem;
+        margin: 0;
+    }
+
+    &__content {
+        @include mixins.form-base;
+    }
+
+    &__fields {
+        @include mixins.form-base;
+    }
+
+    &__actions {
+        display: flex;
+        justify-content: center;
+        margin-top: 0.5rem;
+    }
+
+    // Réactiver la sélection de texte pour les champs de saisie
+    input,
+    textarea,
+    select {
+        -webkit-user-select: text;
+        -moz-user-select: text;
+        -ms-user-select: text;
+        user-select: text;
+    }
+}

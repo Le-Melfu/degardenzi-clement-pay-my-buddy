@@ -1,0 +1,153 @@
+@use './assets/styles/variables' as variables;
+@use './assets/styles/mixins' as mixins;
+@use './assets/styles/animations' as animations;
+
+// Reset CSS
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: variables.$font-family;
+    font-size: variables.$font-size;
+    font-weight: variables.$font-weight;
+    @include mixins.font-smoothing;
+}
+
+// Root element
+:root {
+    width: 100%;
+    height: 100%;
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+// HTML element
+html {
+    width: 100%;
+    height: 100%;
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    overflow-x: hidden;
+}
+
+// Body element
+body {
+    width: 100%;
+    height: 100%;
+    min-width: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.5;
+    color-scheme: light dark;
+    color: variables.$light-text;
+    background-color: variables.$light-bg;
+    overflow-x: hidden;
+    overflow-y: auto;
+    @include mixins.font-smoothing;
+}
+
+// Main app container
+#root {
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+// Global typography
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+    font-weight: inherit;
+    font-size: inherit;
+    color: variables.$light-text;
+}
+
+h1 {
+    font-size: 3.2em;
+    line-height: 1.1;
+}
+
+p {
+    margin: 0;
+}
+
+// Global links
+a {
+    font-weight: 500;
+    color: variables.$primary-color;
+    text-decoration: inherit;
+
+    &:hover {
+        color: variables.$primary-hover;
+    }
+}
+
+// Global buttons
+button {
+    @include mixins.button-base;
+    background-color: variables.$light-button-bg;
+
+    &:hover {
+        border-color: variables.$primary-color;
+    }
+}
+
+// Global form elements
+input,
+textarea,
+select {
+    font-family: inherit;
+    font-size: inherit;
+    border: none;
+    outline: none;
+}
+
+// Global lists
+ul,
+ol {
+    list-style: none;
+}
+
+// Global images
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+// Utils
+.app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+.hidden {
+    display: none;
+}
+
+.no-text-selection {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+}

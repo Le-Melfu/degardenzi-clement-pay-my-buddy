@@ -1,0 +1,77 @@
+@use '../../assets/styles/variables' as variables;
+
+.main-button {
+    border: none;
+    border-radius: variables.$border-radius;
+    font-family: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all variables.$transition-duration;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    // Variants
+    &--primary {
+        background-color: variables.$primary-color;
+        color: white;
+
+        &:hover:not(:disabled) {
+            background-color: variables.$primary-hover;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(100, 108, 255, 0.3);
+        }
+
+        &:active:not(:disabled) {
+            transform: translateY(0);
+        }
+    }
+
+    &--secondary {
+        background-color: transparent;
+        color: variables.$primary-color;
+        border: 2px solid variables.$primary-color;
+
+        &:hover:not(:disabled) {
+            background-color: variables.$primary-color;
+            color: white;
+        }
+    }
+
+    // Sizes
+    &--small {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+
+    &--medium {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    &--large {
+        padding: 1rem 2rem;
+        font-size: 1.125rem;
+    }
+}
+
+// Light theme
+@media (prefers-color-scheme: light) {
+    .main-button {
+        &--secondary {
+            color: variables.$primary-color;
+            border-color: variables.$primary-color;
+
+            &:hover:not(:disabled) {
+                background-color: variables.$primary-color;
+                color: white;
+            }
+        }
+    }
+}

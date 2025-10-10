@@ -1,0 +1,81 @@
+@use 'variables' as variables;
+@use 'sass:color';
+
+@mixin font-smoothing {
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+@mixin button-base {
+    border-radius: variables.$border-radius;
+    border: 1px solid transparent;
+    padding: 0.6em 1.2em;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color variables.$transition-duration;
+}
+
+@mixin table-grid {
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr;
+}
+
+@mixin table-grid-mobile {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    padding: 1rem;
+    border: 1px solid variables.$light-border;
+    border-radius: variables.$border-radius;
+    margin-bottom: 0.5rem;
+}
+
+@mixin table-cell {
+    word-wrap: break-word;
+    overflow: hidden;
+    overflow-wrap: break-word;
+    white-space: normal;
+    width: 100%;
+    padding: 1rem 1.5rem;
+    color: variables.$text-dark;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+}
+
+@mixin custom-scrollbar(
+    $width: 8px,
+    $track-color: variables.$light-border,
+    $thumb-color: variables.$primary-color
+) {
+    &::-webkit-scrollbar {
+        width: $width;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: $track-color;
+        border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: $thumb-color;
+        border-radius: 4px;
+
+        &:hover {
+            background: color.scale($thumb-color, $lightness: -10%);
+        }
+    }
+}
+
+@mixin form-base {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+@mixin form-field {
+    display: flex;
+    flex-direction: column;
+}

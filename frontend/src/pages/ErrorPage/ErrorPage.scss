@@ -1,0 +1,97 @@
+@use '../../assets/styles/variables.scss' as variables;
+
+.error-page {
+    min-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: variables.$primary-color;
+    padding: 2rem;
+}
+
+.error-content {
+    text-align: center;
+    color: variables.$white-color;
+    max-width: 600px;
+    width: 100%;
+}
+
+.error-number {
+    font-size: 12rem;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 1rem;
+    color: variables.$white-color;
+    text-shadow: 0 2px 4px rgba(variables.$black-color, 0.3);
+}
+
+.error-title {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: variables.$white-color;
+    text-shadow: 0 2px 4px rgba(variables.$black-color, 0.3);
+}
+
+.not-found-message {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.home-button {
+    background: variables.$white-color;
+    color: variables.$primary-color;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(variables.$black-color, 0.2);
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(variables.$black-color, 0.3);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+    .error-number {
+        font-size: 8rem;
+    }
+
+    .error-title {
+        font-size: 2rem;
+    }
+
+    .error-message {
+        font-size: 1rem;
+    }
+
+    .home-button {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .error-number {
+        font-size: 6rem;
+    }
+
+    .error-title {
+        font-size: 1.5rem;
+    }
+
+    .error-message {
+        font-size: 0.9rem;
+    }
+}

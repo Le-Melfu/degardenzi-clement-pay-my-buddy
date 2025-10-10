@@ -44,12 +44,13 @@ public class UserConnectionController {
         String userEmail = principal.getUsername();
         loggingService.info("UserConnectionController: Looking for user with email: " + userEmail);
         Optional<User> user = userService.findByEmail(userEmail);
-        loggingService.info("UserConnectionController: User found: " + user.get().getUsername());
 
         if (user.isEmpty() || user.get() == null) {
             loggingService.error("UserConnectionController: User not found with email: " + userEmail);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+
+        loggingService.info("UserConnectionController: User found: " + user.get().getUsername());
 
         UserConnection connection = userConnectionService.addConnection(user.get().getId(),
                 request.getConnectionEmail());

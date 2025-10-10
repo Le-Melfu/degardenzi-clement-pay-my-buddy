@@ -25,7 +25,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         User user = userService.findByEmail(email)
                 .orElseThrow(() -> {
-                    loggingService.error("CustomUserDetailsService: User not found with email: " + email);
+                    loggingService.error("CustomUserDetailsService: User not found with email: "
+                            + email);
                     return new UsernameNotFoundException("User not found: " + email);
                 });
 

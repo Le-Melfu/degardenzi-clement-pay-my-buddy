@@ -10,12 +10,11 @@ import java.util.Optional;
 public interface TransactionService {
 
     /**
-     * Create a new transaction (PENDING status)
+     * Create a new transaction
      * 
-     * @param sender        the sender user
-     * @param receiverId    the receiver user ID
-     * @param amountInCents the amount in cents
-     * @param description   the transaction description
+     * @param sender             the sender user
+     * @param transactionRequest the transaction request containing receiver ID,
+     *                           amount, and description
      * @return the created transaction
      */
     Transaction createTransaction(User sender, CreateTransactionRequestDTO transactionRequest);

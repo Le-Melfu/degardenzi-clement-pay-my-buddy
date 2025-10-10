@@ -1,0 +1,32 @@
+@use '../../assets/styles/variables' as variables;
+
+.profile-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    background-color: #ffffff;
+    padding: 2rem;
+
+    .profile-container {
+        margin-top: 100px;
+        display: flex;
+        height: 100%;
+        justify-content: center;
+    }
+
+    .profile-content {
+        display: flex;
+        flex-direction: row;
+        max-width: 600px;
+        max-height: 250px;
+        gap: 20px;
+        margin: 0 auto;
+
+        .modify-button {
+            display: flex;
+            margin-top: 2rem;
+            align-self: flex-end;
+            background-color: variables.$secondary-color;
+        }
+    }
+}

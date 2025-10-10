@@ -1,0 +1,25 @@
+@use '../../assets/styles/variables' as variables;
+
+.login-page {
+    height: 100%;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: variables.$light-bg;
+
+    .login-form {
+        width: 100%;
+        max-width: 400px;
+        gap: 1rem;
+    }
+
+    .error-message {
+        color: variables.$error-color;
+        margin-top: 8px;
+        margin-bottom: 0;
+        text-align: center;
+        font-size: 16px;
+    }
+}

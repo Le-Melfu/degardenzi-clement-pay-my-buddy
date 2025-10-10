@@ -1,0 +1,66 @@
+@use '../../assets/styles/variables' as variables;
+
+.input-field {
+    display: flex;
+    flex-direction: column;
+
+    & > * {
+        font-weight: 700;
+    }
+
+    &__label {
+        display: inline;
+        color: variables.$light-text;
+        font-size: 0.9rem;
+    }
+
+    &__required {
+        color: #e74c3c;
+        margin-left: 0.25rem;
+    }
+
+    &__input {
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: variables.$border-radius;
+        font-size: 1rem;
+
+        transition: border-color variables.$transition-duration;
+        background-color: #fff;
+        color: variables.$text-dark;
+
+        &:focus {
+            outline: none;
+            border-color: variables.$primary-color;
+            box-shadow: 0 0 0 2px rgba(100, 108, 255, 0.2);
+        }
+
+        &::placeholder {
+            color: variables.$text-muted;
+            font-family: variables.$font-family;
+            font-weight: 400;
+        }
+
+        &--error {
+            border-color: #e74c3c;
+        }
+    }
+
+    &__error {
+        color: #e74c3c;
+        font-size: 0.8rem;
+        margin-top: 0.25rem;
+    }
+}
+
+.input-field {
+    &__label {
+        color: variables.$light-text;
+    }
+
+    &__input {
+        background-color: #fff;
+        border-color: #ddd;
+        color: #333;
+    }
+}

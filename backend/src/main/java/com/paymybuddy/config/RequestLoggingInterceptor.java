@@ -44,9 +44,20 @@ public class RequestLoggingInterceptor implements HandlerInterceptor {
 
         String status = String.valueOf(response.getStatus());
 
-        loggingService.info(String.format("[PAYMYBUDDY] - RESPONSE: %s %s - Status: %s - Duration: %dms",
+        // Get authenticated user from SecurityContext
+        String userInfo = "anonymous";
+        org.springframework.security.core.Authentication authentication = org.springframework.security.core.context.SecurityContextHolder
+                .getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated()
+                && !(authentication instanceof org.springframework.security.authentication.AnonymousAuthenticationToken)) {
+            userInfo = authentication.getName();
+        }
+
+        loggingService.info(String.format("[PAYMYBUDDY] - RESPONSE: %s %s - User: %s - Status: %s - Duration: %dms",
                 request.getMethod(),
                 request.getRequestURI(),
+                userInfo,
                 status,
                 duration));
     }

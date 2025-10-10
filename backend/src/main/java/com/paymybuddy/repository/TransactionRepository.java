@@ -4,7 +4,6 @@ import com.paymybuddy.models.Transaction;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.lang.NonNull;
@@ -48,34 +47,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
          */
         @Query("SELECT t FROM Transaction t WHERE t.sender.id = :userId OR t.receiver.id = :userId ORDER BY t.id DESC")
         List<Transaction> findAllTransactionsForUser(@Param("userId") Integer userId);
-
-        /**
-         * Find pending transactions for a user
-         * 
-         * @param userId the user ID
-         * @return list of pending transactions
-         */
-        @Query("SELECT t FROM Transaction t WHERE (t.sender.id = :userId OR t.receiver.id = :userId) AND t.status = 'PENDING'")
-        List<Transaction> findPendingTransactionsForUser(@Param("userId") Integer userId);
-
-        /**
-         * Find transaction by ID with validation status
-         * 
-         * @param transactionId the transaction ID
-         * @return optional containing the transaction if found
-         */
-        Optional<Transaction> findByIdAndStatus(Integer transactionId, String status);
-
-        /**
-         * Update transaction status
-         * 
-         * @param transactionId the transaction ID
-         * @param status        the new status
-         */
-        @Modifying
-        @Query("UPDATE Transaction t SET t.status = :status WHERE t.id = :transactionId")
-        void updateTransactionStatus(@Param("transactionId") Integer transactionId,
-                        @Param("status") String status);
 
         /**
          * Save a transaction

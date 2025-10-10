@@ -1,0 +1,41 @@
+.navbar {
+    align-self: center;
+    display: flex;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    justify-content: space-between;
+    align-items: center;
+    margin: 8px 0;
+
+    .navbar-logo {
+        font-size: 20px;
+        font-weight: bold;
+        color: #000000;
+        background: none;
+    }
+
+    .navbar-links {
+        display: flex;
+
+        .navbar-link {
+            background: none;
+            border: none;
+            text-decoration: none;
+            color: #666666;
+            font-size: 20px;
+            transition: color 0.2s ease;
+            cursor: pointer;
+            font-family: inherit;
+
+            &:hover {
+                color: #000000;
+            }
+
+            &.active {
+                color: #007bff;
+                font-weight: 500;
+            }
+        }
+    }
+}

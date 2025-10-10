@@ -1,0 +1,82 @@
+@use '../../App.scss';
+@use '../../assets/styles/variables' as variables;
+
+.transfer-page {
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    padding: 2rem;
+    box-sizing: border-box;
+
+    .transfer-page-user-content {
+        max-width: 1200px;
+        margin: 0 auto;
+
+        .transfer-page-user-content-header {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1.5rem;
+
+            h1 {
+                color: #333333;
+                font-size: 1.5rem;
+                font-weight: 600;
+                margin: 0 0 0.5rem 0;
+            }
+
+            p {
+                color: #333333;
+                font-size: 1.1rem;
+                font-weight: 500;
+                margin: 0 0 1rem 0;
+            }
+
+            .add-funds-section {
+                display: flex;
+                gap: 1rem;
+                align-items: end;
+
+                .text-field {
+                    flex: 1;
+                    min-width: 200px;
+                }
+
+                .main-button {
+                    flex-shrink: 0;
+                    min-width: 150px;
+                }
+            }
+        }
+    }
+
+    .transfer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0; // Important pour que flex fonctionne correctement
+        overflow: hidden; // Empêche le débordement
+
+        .transfer-form {
+            flex-shrink: 0; // Empêche le formulaire de rétrécir
+        }
+
+        .transactions-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0; // Important pour que flex fonctionne correctement
+            overflow: hidden; // Empêche le débordement
+        }
+    }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+    .transfer-page {
+        padding: 1rem;
+    }
+}

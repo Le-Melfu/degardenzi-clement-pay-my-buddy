@@ -1,0 +1,109 @@
+@use '../../assets/styles/variables' as variables;
+@use '../../assets/styles/mixins' as mixins;
+
+.transfer-form {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+
+    background-color: variables.$white-color;
+    padding: 1rem;
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr auto;
+        gap: 1rem;
+        align-items: end;
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+
+            .connection-select {
+                padding: 0.75rem 2.5rem 0.75rem 1rem;
+                border: 2px solid variables.$light-border;
+                border-radius: variables.$border-radius;
+                font-size: 1rem;
+                background-color: variables.$white-color;
+                color: variables.$light-text;
+                transition: border-color variables.$transition-duration ease;
+                appearance: none;
+                background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a8a8a8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+                background-repeat: no-repeat;
+                background-position: right 0.75rem center;
+                background-size: 1rem;
+                cursor: pointer;
+
+                &:focus {
+                    outline: none;
+                    border-color: variables.$primary-color;
+                    box-shadow: 0 0 0 3px rgba(32, 127, 238, 0.1);
+                }
+
+                &:hover {
+                    border-color: variables.$primary-color;
+                }
+
+                // Pour les navigateurs qui ne supportent pas appearance: none
+                &::-ms-expand {
+                    display: none;
+                }
+            }
+
+            &.amount-field {
+                .input-field {
+                    text-align: right;
+                }
+            }
+
+            .hidden {
+                position: absolute;
+                left: -10000px;
+                width: 1px;
+                height: 1px;
+                overflow: hidden;
+            }
+        }
+    }
+
+    // Réactiver la sélection de texte pour les champs de saisie
+    input,
+    textarea,
+    select {
+        -webkit-user-select: text;
+        -moz-user-select: text;
+        -ms-user-select: text;
+        user-select: text;
+    }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+    .transfer-form {
+        padding: 1.5rem;
+
+        .form-row {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+
+            .form-field {
+                &:last-child {
+                    margin-top: 0.5rem;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .transfer-form {
+        padding: 1rem;
+
+        .form-row {
+            gap: 1rem;
+        }
+    }
+}

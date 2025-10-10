@@ -1,0 +1,65 @@
+@use '../../assets/styles/variables' as variables;
+@use '../../assets/styles/mixins' as mixins;
+
+.table-row {
+    @include mixins.table-grid;
+    border-bottom: 1px solid variables.$border-light;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+        background-color: #f8f9fa;
+    }
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    .table-cell {
+        @include mixins.table-cell;
+
+        &:first-child {
+            font-weight: 500;
+        }
+
+        &:last-child {
+            font-weight: 600;
+        }
+
+        &.align-right {
+            text-align: right;
+            padding-right: 2.5rem;
+        }
+
+        &.amount-cell {
+            &.outgoing {
+                color: variables.$error-color; // Rouge pour les sorties
+            }
+
+            &.incoming {
+                color: variables.$success-color; // Vert pour les entrées
+            }
+
+            &.failed {
+                text-decoration: line-through;
+                color: variables.$text-muted; // Rouge pour les échecs
+            }
+        }
+    }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+    .table-row {
+        @include mixins.table-grid-mobile;
+
+        .table-cell {
+            padding: 0.25rem 0;
+
+            &:before {
+                content: attr(data-label) ': ';
+                font-weight: 600;
+                color: #666666;
+            }
+        }
+    }
+}

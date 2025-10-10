@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://paymybuddy.com/sitemap.xml
+
+# Crawl-delay (optionnel)
+Crawl-delay: 1
