@@ -22,16 +22,4 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .excludePathPatterns("/error");
     }
-
-    @Override
-    public void addCorsMappings(@NonNull CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOriginPatterns("http://localhost:5173", "http://localhost:3000")
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH")
-                .allowedHeaders("*")
-                .exposedHeaders("Authorization", "Content-Type", "X-Requested-With", "accept", "Origin",
-                        "Access-Control-Request-Method", "Access-Control-Request-Headers")
-                .allowCredentials(true)
-                .maxAge(3600);
-    }
 }
